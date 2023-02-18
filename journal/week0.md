@@ -22,6 +22,10 @@
 ### Create a Billing Alarm
 
 ### Create a Budget
+1. Using the documentation listed in the References section, I copied budget.json and notifications.json files to gitpod. I saved them under /aws/json.
+I changed the $amount for budget to $10 and the renamed it to "Example Tag budget using CLI" attached screenshot ![Create budgetlimit gitpod]()
+2. Please see the attached screenshot for notifications. I updated my email. ![Create budget notification in gitpod]()
+3. I created a persitant environment variable AWS_ACCOUNT_ID to hold my aws account number. I ran the below commands on gitpod to create budget. ![Create budget gitpod]()
 
 
 ## Homework Challenge
@@ -33,4 +37,8 @@ I encountered few issues while setting up MFA. I first used Authy app and entere
 ### Create IAM Role
 I created Audit Role that allows EC2 instances to call AWS services on my behalf.
 ![IAM role](assets/week0_CreateRole.PNG)
+
+## References
+https://docs.aws.amazon.com/cli/latest/reference/budgets/create-budget.html
+
 
