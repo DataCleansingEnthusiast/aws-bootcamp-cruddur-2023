@@ -18,8 +18,13 @@
 
 
 ### Install AWS CLI
+1. As i watched the class video, I paused and worked with the commands on gitpod. 
+
 
 ### Create a Billing Alarm
+I am attaching the json code screenshot for proof. (PS: I have scratched out my accountid number) ![Billing alarm](assets/week0_Alarmjson.PNG)
+I also took a screenshot of 'Alarm in Cloud watch' ![Cloud Watch](assets/week0_CloudWatch.PNG)
+
 
 ### Create a Budget
 1. Using the documentation listed in the References section, I copied budget.json and notifications.json files to gitpod. I saved them under /aws/json.
