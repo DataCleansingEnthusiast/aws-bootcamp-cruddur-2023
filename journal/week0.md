@@ -19,11 +19,18 @@
 
 ### Install AWS CLI
 1. As i watched the class video, I paused and worked with the commands on gitpod. 
+2. In the workspace directory of gitpod, I unzipped awscliv2.zip and installed aws/install file. ![gitpod.yml file on github](assets/week0_gitpod-yaml.PNG)
+3. I assigned values from AWS credentials file to 3 env variables AWS_ACCESS_KEY_ID="xxx" ; AWS_SECRET_ACCESS_KEY="xxx" ; AWS_DEFAULT_REGION="us-east-1"
+4. Please see the attached screenshot from gitpod.![Gitpod screenshot](assets/week0_awsCLI.png)
+ 
 
 
 ### Create a Billing Alarm
-I am attaching the json code screenshot for proof. (PS: I have scratched out my accountid number) ![Billing alarm](assets/week0_Alarmjson.PNG)
-I also took a screenshot of 'Alarm in Cloud watch' ![Cloud Watch](assets/week0_CloudWatch.PNG)
+I am attaching the json code screenshot for proof. (PS: I have scratched out my accountid number) 
+![Billing alarm](assets/week0_Alarmjson.PNG)
+
+I also took a screenshot of 'Alarm in Cloud watch' 
+![Cloud Watch](assets/week0_CloudWatch.PNG)
 
 
 ### Create a Budget
