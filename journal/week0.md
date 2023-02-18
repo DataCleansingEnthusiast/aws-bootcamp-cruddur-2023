@@ -26,7 +26,7 @@
 I changed the $amount for budget to $10 and the renamed it to "Example Tag budget using CLI" attached screenshot ![Create budgetlimit gitpod](assets/week0_CreateBudget_gitpod.png)
 2. Please see the attached screenshot for notifications. I updated my email. ![Create budget notification in gitpod](assets/week0_CreateBudgetNotify_gitpod.png)
 3. I created a persitant environment variable AWS_ACCOUNT_ID to hold my aws account number. I ran the below commands on gitpod to create budget. ![Create budget gitpod](assets/week0_CreateBudget_final.png)
-4. To check whether it's created correctly, I logged in as root user to my AWS account and then AWS Billing to Budgets and please see the screenshot the newly created budget ![New budget](assets/week0_Budget_Console.png)
+4. To check whether it's created correctly, I logged in as root user to my AWS account and then AWS Billing to Budgets and please see the screenshot the newly created budget ![New budget](assets/week0_Budget_Console.PNG)
 
 
 ## Homework Challenge
