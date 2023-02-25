@@ -1,7 +1,7 @@
 # Week 1 — App Containerization
 
 ## Backend
-We started off by learning how to containerize using Docker our crudder app. We created a Docker file which installs python libraries used in this app and runs flask at port 4567. Code for this is in
+We started off by learning how to containerize using Docker for our crudder app. We created a Docker file which installs python libraries used in this app and runs flask at port 4567. Code for this is in
 
 [Backend Dockerfile](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/Dockerfile)
 
@@ -43,7 +43,7 @@ Here are some postgres commands I tried
 I also learnt from Chirag’s videos about free tier pricing for gitpod, GitHub codespaces, and AWS Cloud9. I also learnt about enabling to log Management events and not to enable the data events for CloudTrail in your AWS account to avoid charges.
 
 ## Security considerations
-We also learnt about 10 Docker Security Best Practices for using Docker in Production with docker image security scanning for docker files , compose with speed and security . We learnt about Docker image vulnerability and also looked at Amazon inspector/Clair can be used to scan these vulnerabilities. We also looked at AWS secrets manager as seen below to encrypt credentials.
+We also learnt about 10 Docker Security best practices for using Docker in Production with docker image security scanning for docker files , compose with security . We learnt about Docker image vulnerability and also looked at how Amazon inspector/Clair can be used to scan these vulnerabilities. We also looked at AWS secrets manager as seen below to encrypt credentials.
 
 ![AWS secrets Manager](assets/week1_AWSSecretsManager.PNG)
 We also learnt about Synx that checks docker compose vulnerability.
