@@ -27,9 +27,9 @@ from time import strftime
 # LOGGER.addHandler(cw_handler)
 # LOGGER.info("Test log");
 
-# X-RAY---
-# from aws_xray_sdk.core import xray_recorder
-# from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+# X-RAY2---
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
 # rollbar --
 import os
@@ -56,23 +56,23 @@ provider.add_span_processor(processor)
 
 
 # turned off xray
-# X-RAY----to start the recorder
+# X-RAY2----to start the recorder
 # AWS_XRAY_URL - endpoint where to send the data
-# xray_url = os.getenv("AWS_XRAY_URL")
-# xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
-
+# OTEL
 # Show this in the logs within the backend-flask app (STDOUT)
-simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
-provider.add_span_processor(simple_processor)
+# simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
+# provider.add_span_processor(simple_processor)
 
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
 
 app = Flask(__name__)
-# X-RAY----
-# XRayMiddleware(app, xray_recorder)
+# X-RAY2----
+XRayMiddleware(app, xray_recorder)
 # Honeycomb---
 # Initialize automatic instrumentation with Flask
 FlaskInstrumentor().instrument_app(app)
@@ -89,6 +89,7 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
+# Cloudwatch logs
 # @app.after_request
 # def after_request(response):
 #     timestamp = strftime('[%Y-%b-%d %H:%M]')
@@ -155,6 +156,7 @@ def data_create_message():
   return
 
 @app.route("/api/activities/home", methods=['GET'])
+@xray_recorder.capture('activities_home')
 def data_home():
   data = HomeActivities.run()
   return data, 200
@@ -165,6 +167,7 @@ def notifications_home():
   return data, 200
 
 @app.route("/api/activities/@<string:handle>", methods=['GET'])
+@xray_recorder.capture('activities_users')
 def data_handle(handle):
   model = UserActivities.run(handle)
   if model['errors'] is not None:
@@ -196,6 +199,7 @@ def data_activities():
   return
 
 @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
+@xray_recorder.capture('activities_show')
 def data_show_activity(activity_uuid):
   data = ShowActivity.run(activity_uuid=activity_uuid)
   return data, 200
