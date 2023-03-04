@@ -21,7 +21,7 @@ aws-xray-sdk. We also added a xray.json file to learn to manually set up Samplin
 
 We created a Xray segment , subsegment and were running into errors. We were not able to see the mock-data. In useractivities.py, we enclosed the code in try and finally and removed the segment code. We had to call xray_recorder.end_segment() before creating a new segment, otherwise the new segment overwrites the existing one. 
 
---
+![Xray fixed](assets/week2_XRayFixed.PNG)
 
 
 ## Rollbar
@@ -48,12 +48,11 @@ This is the error logging and trace from out backend flask to Rollbar
 ## Watchtower
 Using CloudWatch, we looked at LOGGER.info and pushed a ‘Test log’ message from backend – app.py. To test if our Crudder app is properly plugged to CloudWatch to trace logs, we refresh the browser several times. 
 
-
--- 
+![CloudWatch Log streams](assets/week2_Cloudwatch_logStreams.png)
 
 When we click on the details of the recent log, we see that the message ‘Test log’ has been pushed from our app to Cloud Watch. 
 
---
+![Backend message in Cloudwatch](assets/week2_Cloudwatch_logStreamsDetails.PNG)
 
 
 
