@@ -48,11 +48,21 @@ This is the error logging and trace from out backend flask to Rollbar
 ## Watchtower
 Using CloudWatch, we looked at LOGGER.info and pushed a ‘Test log’ message from backend – app.py. To test if our Crudder app is properly plugged to CloudWatch to trace logs, we refresh the browser several times. 
 
-![CloudWatch Log streams](assets/week2_Cloudwatch_logStreams.png)
+![CloudWatch Log streams](assets/week2_Cloudwatch_logStreams.PNG)
 
 When we click on the details of the recent log, we see that the message ‘Test log’ has been pushed from our app to Cloud Watch. 
 
 ![Backend message in Cloudwatch](assets/week2_Cloudwatch_logStreamsDetails.PNG)
 
-
+## Career advice video
+I also watched the first Cloud career video. As of this week, I made some points for myself to focus.
+#### My Journey to the Cloud
+##### I am going to be :
+    Backend Engineer 
+##### I am a good fit: 
+    I have 10+ years experience in backend engg but hoping to acquire skills to get to the next level
+##### I will not get distracted by:
+    front engg tools
+    focus first on AWS and not other cloud providers
+Note: this part will be updated in the upcoming weeks
 
