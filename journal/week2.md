@@ -17,7 +17,7 @@ Attached are the 2 screenshots from Honeycomb
 We instrumented AWS X-Ray into backend flask application and looked at X-Ray traces in aws console. I made changes to requirements.txt to add 
 aws-xray-sdk. We also added a xray.json file to learn to manually set up Sampling rules.
 
-![Sampling Rule XRay](assets/week2_SamplingRule.PNG)
+--placeholder xray
 
 We created a Xray segment , subsegment and were running into errors. We were not able to see the mock-data. In useractivities.py, we enclosed the code in try and finally and removed the segment code. We had to call xray_recorder.end_segment() before creating a new segment, otherwise the new segment overwrites the existing one. 
 
@@ -42,11 +42,18 @@ This is the error in the browser for the missing return
 
 This is the error logging and trace from out backend flask to Rollbar
 
-![return missing Rollbar error](assets/week2_Error_RollBarCapture.PNG)
+--placeholder
 
 
 ## Watchtower
+Using CloudWatch, we looked at LOGGER.info and pushed a ‘Test log’ message from backend – app.py. To test if our Crudder app is properly plugged to CloudWatch to trace logs, we refresh the browser several times. 
 
+
+![CloudWatch Log streams](assets/week2_Cloudwatch_logStreams.PNG)
+
+When we click on the details of the recent log, we see that the message ‘Test log’ has been pushed from our app to Cloud Watch. 
+
+![Backend message in Cloudwatch](assets/week2_Cloudwatch_logStreamsDetails.PNG)
 
 
 
