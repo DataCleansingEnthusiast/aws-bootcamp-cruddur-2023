@@ -8,7 +8,7 @@ import { Auth } from 'aws-amplify';
 
 export default function SignupPage() {
 
-  // Username is Eamil
+  // Username is Email
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -16,21 +16,28 @@ export default function SignupPage() {
   const [errors, setErrors] = React.useState('');
 
   const onsubmit = async (event) => {
-    setErrors('')
     event.preventDefault();
+    setErrors('')
+    
     try {
-      Auth.signIn(username, password) //username is actually email
-        .then(user => {
-          localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken)
-          window.location.href = "/"
-        })
-        .catch(err => { console.log('Error!', err) });
-    } catch (error) {
-      if (error.code == 'UserNotConfirmedException') {
-        window.location.href = "/confirm"
+    const { user } = await Auth.signUp({
+      username: email,
+      password: password,
+      attributes: {
+        name: name,
+        email: email,
+        preferred_username: username,
+      },
+      autoSignIn: { // optional - enables auto sign in after user is confirmed
+        enabled: true,
       }
-      setCognitoErrors(error.message)
-    }
+    });
+    console.log(user);
+    window.location.href = `/confirm?email=${email}`
+  } catch (error) {
+      console.log(error);
+      setErrors(error.message)
+  }
     return false
   }
   const name_onchange = (event) => {
