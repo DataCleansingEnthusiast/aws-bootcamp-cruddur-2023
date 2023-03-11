@@ -134,7 +134,7 @@ aws cognito-idp admin-set-user-password \
 
 Attached is the verification email with code: ![VerificationEmail](assets/week3_VerificationEmail.PNG)
 
-Logged in as myself [Login](assets/week3_User_PreferredUName.PNG)
+Logged in as myself ![Login](assets/week3_User_PreferredUName.PNG)
 
 Confirmed email and user
 
@@ -240,11 +240,11 @@ const onsubmit_send_code = async (event) => {
 
 d. Test for recovering password is shown below:
 
-assets/week3_TestRecoveryCodeSend.png
+![Recover Password send code](assets/week3_TestRecoveryCodeSend.PNG)
 
-assets/week3_Confirmation.png
+![ApplyCode From email](assets/week3_Confirmation.PNG)
 
-assets/week3_PasswordReset.png
+![Password Reset message](assets/week3_PasswordReset.PNG)
 
 ## Update frontend css for better color contrast on my windows machine
 
