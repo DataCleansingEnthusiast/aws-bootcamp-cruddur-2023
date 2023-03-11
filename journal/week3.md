@@ -282,7 +282,3 @@ Modified [DesktopSidebar.css](https://github.com/DataCleansingEnthusiast/aws-boo
 color: rgba(255,255,255,0.5);
 ```
 
-1. This week we learnt to implement a decentralized authentication service into a web-application with custom login and signup pages in our react application. 
-2. We learnt to create AWS cognito user pool using aws console. 
-3. We also learnt to implement API calls to Amazon Cognito for login, signup, recovery and forgot password page
-4. We also modified .css pages to change background color so that color contrast on Windows machines look better for out Crudder app.
