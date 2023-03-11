@@ -140,7 +140,7 @@ Confirmed email and user
 
 ![LoggedIn_UName_PWD](assets/week3_Verified_Uname_Pname.PNG)
 
-## `Implementing Custom Signup, Confirmation, and Recovery Page`
+## Implementing Custom Signup, Confirmation, and Recovery Page
 
 1. Modified the [SignupPage.js](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/frontend-react-js/src/pages/SignupPage.js) file: 
 
@@ -242,7 +242,7 @@ d. Test for recovering password is shown below:
 
 ![Recover Password send code](assets/week3_TestRecoveryCodeSend.PNG)
 
-![ApplyCode From email](assets/week3_Confirmation.PNG)
+![ApplyCode from email](assets/week3_Confirmation.PNG)
 
 ![Password Reset message](assets/week3_PasswordReset.PNG)
 
