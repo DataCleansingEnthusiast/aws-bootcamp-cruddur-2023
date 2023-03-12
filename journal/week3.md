@@ -282,3 +282,4 @@ Modified [DesktopSidebar.css](https://github.com/DataCleansingEnthusiast/aws-boo
 color: rgba(255,255,255,0.5);
 ```
 
+## TO DO ....Verify JWT
