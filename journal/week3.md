@@ -282,4 +282,85 @@ Modified [DesktopSidebar.css](https://github.com/DataCleansingEnthusiast/aws-boo
 color: rgba(255,255,255,0.5);
 ```
 
-## TO DO ....Verify JWT
+## Verify JWT
+Below contains work done to send the JWT to the backend server, verify it and render a different Home page text based on the outcome of the verification. 
+
+1. These are the changes made to [HomeFeedPage.js](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/frontend-react-js/src/pages/HomeFeedPage.js) file to make Homepage to include JWT as part of request header when it’s talking to backend server.
+
+```jsx
+const loadData = async () => {
+    try {
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/home`
+      const res = await fetch(backend_url, {
+        headers: {
+          # Add JWT to request Header
+          Authorization: `Bearer ${localStorage.getItem("access_token")}` 
+        },
+        method: "GET"
+      });
+```
+
+2. To verify that the token was received, *Flask-AWSCognito* was added to [requirements.txt](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/requirements.txt) file. New folder *lib* in the backend directory was created. Within the folder, python file called [cognito_jwt_token.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/cognito_jwt_token.py) was created. 
+3. In the [app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) file, a object of type CognitoJwtToken was imported and initialized and also made changes to data_home method:
+
+```jsx
+# some code
+from lib.cognito_jwt_token import CognitoJwtToken, extract_access_token, TokenVerifyError
+# more code
+
+#JWT Token
+cognito_jwt_token = CognitoJwtToken(
+  user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"), 
+  user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
+  region=os.getenv("AWS_DEFAULT_REGION")
+)
+# more code
+@app.route("/api/activities/home", methods=['GET'])
+@xray_recorder.capture('activities_home')
+def data_home():
+  access_token = extract_access_token(request.headers)
+  try:
+    claims = cognito_jwt_token.verify(access_token)
+    # authenicatied request
+    app.logger.debug("authenicated")
+    app.logger.debug(claims)
+    app.logger.debug(claims['username'])
+    data = HomeActivities.run(cognito_user_id=claims['username'])
+  except TokenVerifyError as e:
+    # unauthenicatied request
+    app.logger.debug(e)
+    app.logger.debug("unauthenicated")
+    data = HomeActivities.run()
+  return data, 200
+```
+
+4. In the [home_activities.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/services/home_activities.py) file, the class method *run()* was modified to accept a user and show an additional crud :
+
+```jsx
+class HomeActivities:
+  def run(cognito_user_id=None): 
+#-- more code
+  if cognito_user_id != None:
+        extra_crud = {
+          'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
+          'handle':  'Lore',
+          'message': 'My dear brother, it is the humans that are the problem',
+          'created_at': (now - timedelta(hours=1)).isoformat(),
+          'expires_at': (now + timedelta(hours=12)).isoformat(),
+          'likes': 1042,
+          'replies': []
+        }
+        results.insert(0,extra_crud)
+#-- more code
+```
+
+5. Added these environment variables to [docker_compose.yml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/docker-compose.yml), AWS_COGNITO_USER_POOL_CLIENT_ID and AWS_COGNITO_USER_POOL_ID
+
+6. JWT is removed when the user logs out. This was done by making the modification to *signOut* method in [ProfileInfo.js](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/frontend-react-js/src/components/ProfileInfo.js)
+Below are the screen shots of our crudder app, before logging in, at signin and after signing in.
+
+![Before Login](assets/week3_JWT_beforelogin.PNG)
+
+![SignIn](assets/week3_JWT_signin.PNG)
+
+![After Login](assets/week3_JWT_LoggedIn.PNG)
