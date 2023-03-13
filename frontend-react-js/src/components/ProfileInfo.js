@@ -14,8 +14,9 @@ export default function ProfileInfo(props) {
 
   const signOut = async () => {
     try {
-        await Auth.signOut({ global: true }); // forcess all sessions to close
+        await Auth.signOut({ global: true }); // forces all sessions to close
         window.location.href = "/"
+        localStorage.removeItem("access_token") //Remove token when the user logs out
     } catch (error) {
         console.log('error signing out: ', error);
     }
