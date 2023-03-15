@@ -1,0 +1,8 @@
+#! /usr/bin/bash
+BGreen="\[\033[1;32m\]" 
+NO_COLOR='\033[0m'
+LABEL="db-connect"
+printf "${BGreen}== ${LABEL}${NO_COLOR}\n"
+
+
+psql $CONNECTION_URL
