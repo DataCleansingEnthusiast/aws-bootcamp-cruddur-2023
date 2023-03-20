@@ -151,7 +151,7 @@ aws rds create-db-instance \
           return sql
       ```
 
-3. In the [docker-compose.yml] file, we updated the environment variable
+3. In the *docker-compose.yml* file, we updated the environment variable
     
 
    `CONNECTION_URL: "${PROD_CONNECTION_URL}"`
