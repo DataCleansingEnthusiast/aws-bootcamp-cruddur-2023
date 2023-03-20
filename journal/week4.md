@@ -33,7 +33,7 @@ aws rds create-db-instance \
 
 ```
 
-3. After this ran, we connected to AWS console and looked at RDS and verified that we could see our database.   ![VerifyRDSCreation](./assets/week4_CreateDBInstance.png)
+3. After this ran, we connected to AWS console and looked at RDS and verified that we could see our database. ![VerifyRDSCreation](./assets/week4_CreateDBInstance.PNG)
 4. We commented out DynamoDB portion of code in [dockercompose.yml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/docker-compose.yml) since most of us are running out of gitpod credits. 
 5. To connect locally to postgresql via the psql client cli tool use host flag to specific localhost.
     
@@ -65,7 +65,7 @@ aws rds create-db-instance \
         `psql $PROD_CONNECTION_URL`
 
      See below screenshot:
-     ![Connect to prod](./assets/week4_ConnectToProd.png)
+     ![Connect to prod](./assets/week4_ConnectToProd.PNG)
  
 
 ### **Bash scripting for Database Operations and SQL files**
@@ -78,13 +78,13 @@ aws rds create-db-instance \
 
 * All these files need their file permissions to be set to executable while in the backend-flask directory:
     
-     `chmod u+x ./bin/filename`
+     `chmod u+x ./bin/filename` or `chmod -R u+x bin/` to change permission to all files in the directory
    
 * We also learnt the use of bash command ‘realpath’ to set 
     
     `file_parent_dir=/workspace/aws-bootcamp-cruddur-2023/backend-flask`
 
-* We need a way to determine when we're running from our production environment (prod) or our local Postgres environment. To do this, we added the below conditional statement
+* We need a way to determine whether we are running from our production environment (prod) or our local Postgres environment. To do this, we added the below conditional statement
     
     ```bash
     if [ "$1" = "prod" ]; then
@@ -99,11 +99,11 @@ aws rds create-db-instance \
 
 3. We created [db-setup](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db-setup) calls scripts db-* to drop tables if exists and creates tables and populate tables. Below is the screenshot
 
-    ![local-database-setup](./assets/week4_setup.png)
+    ![local-database-setup](./assets/week4_setup.PNG)
 
 4. Connect to local database:
 
-    ![local-db-inners](./assets/week4_LocalDBconnect.png)
+    ![local-db-inners](./assets/week4_LocalDBconnect.PNG)
 
 5. To allow connection from our workspace to the aws rds instance, a script [rds-update-sg-rule](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/rds-update-sg-rule) is created. Note: We have set environment keys for *DB_SG_RULE_ID* and *DB_SG_ID*
   - The *DB_SG_ID* is the security group id of the security group attached to the rds instance
@@ -111,13 +111,15 @@ aws rds create-db-instance \
 
 6. Since the workspace is temporary, we need to set it at startup of every new workspace. We added  the below postgres task in [.gitpod.yml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/.gitpod.yml) file:
     
-      `export GITPOD_IP=$(curl ifconfig.me)
-    source "$THEIA_WORKSPACE_ROOT/backend-flask/bin/rds-update-sg-rule"`
+      ```yaml
+      export GITPOD_IP=$(curl ifconfig.me)
+      source "$THEIA_WORKSPACE_ROOT/backend-flask/bin/rds-update-sg-rule"
+    ```
     
 
 ### **Install Postgres Driver in Backend Application and Connecting to Local RDS Instance**
 
-1. We need the *psycopg* library as a driver for connecting to the postgres container. The following was added to the requirements.txt file
+1. We need the *psycopg* library as a driver for connecting to the postgres container. The following was added to the **requirements.txt** file
     
     ```txt
      psycopg[binary]
@@ -155,22 +157,19 @@ aws rds create-db-instance \
    `CONNECTION_URL: "${PROD_CONNECTION_URL}"`
     
 
-4. In our [home_activities.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/services/home_activities.py) we'll replace our mock endpoint with real api call
+4. In our [home_activities.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/services/home_activities.py) we replaced our mock endpoint with real api call
    
 5. Running docker compose up and inspecting the frontend:
-    ![Frontend](./assets/week4_FirstQuery.png)
+    ![Frontend](./assets/week4_FirstQuery.PNG)
 
 ### ****Setup Cognito post confirmation lambda****
 
 The goal of this chapter is to insert registered users post registration confirmation into the users table within cruddur database.
-1. Firstly created a new function in the lambda service page. The following basic setup was used:
-    - Author from scratch
-    - Provide the function name
-    - Runtime: Python3.8
-    - Architecture: x86_64
+1. Firstly created a new function in the lambda service page using aws console. The following basic setup was used as seen in screenshot:
+    ![Lambda Function Creation steps](./assets/week4_CreateLambdaFunc.PNG)
 
 2. In the new function page, I copied the following code into the editor as seen below and we deploy. 
-    [Lambda Function](./assets/week4_LambdaFunc.PNG)
+    ![Lambda Function](./assets/week4_LambdaFunc.PNG)
 
 3. To use the *psycopg2* we  needed to add a layer. There are several layer arns available [here](https://github.com/jetbridge/psycopg2-lambda-layer) for use. I    used `us-east-1` and `us-east-2` for python 3.8. I also added the environment variable *CONNECTION_URL* which has the same value as *PROD_CONNECTION_URL*. I      also created [cruddur-post-confirmation.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/lambdas/cruddur-post-confirmation.py) where username, preferred username, email and cognitoid is inserted to users table.
   
@@ -203,7 +202,7 @@ The goal of this chapter is to insert registered users post registration confirm
     ![CloudWatch Logs](./assets/week4_CloudWatchLog_NewUser.PNG)
 
     Below is the screenshot when we check tables
-    ![post-confirm-db](./assets/week4_PostConfirmDB.png)
+    ![post-confirm-db](./assets/week4_PostConfirmDB.PNG)
 
 ### **Creating New Activities with a Database Insert**
 
@@ -271,6 +270,6 @@ The goal of this chapter is to insert registered users post registration confirm
         />
     ```
 
-5. I successfully posted crudds as seen in the screenshot below
+5. I successfully posted cruds as seen in the screenshot below
 
-    ![crudds](./assets/week4_AfterSignIn_Cruds.png)
+    ![cruds](./assets/week4_AfterSignIn_Cruds.PNG)
