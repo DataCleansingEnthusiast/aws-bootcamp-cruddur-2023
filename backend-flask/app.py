@@ -14,7 +14,7 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
-from services.users_short import *
+#from services.users_short import *
 
 #import token verifier
 #from lib.cognito_jwt_token import TokenVerifyError, CognitoJwtToken
