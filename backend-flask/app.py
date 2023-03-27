@@ -65,8 +65,8 @@ provider.add_span_processor(processor)
 # turned off xray
 # X-RAY2----to start the recorder
 # AWS_XRAY_URL - endpoint where to send the data
-#xray_url = os.getenv("AWS_XRAY_URL")
-#xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
 # OTEL
 # Show this in the logs within the backend-flask app (STDOUT)
@@ -87,7 +87,7 @@ cognito_jwt_token = CognitoJwtToken(
 )
 
 # X-RAY2----
-XRayMiddleware(app, xray_recorder)
+#XRayMiddleware(app, xray_recorder)
 # Honeycomb---
 # Initialize automatic instrumentation with Flask
 FlaskInstrumentor().instrument_app(app)
@@ -249,7 +249,7 @@ def data_create_message():
     return {}, 401
 
 @app.route("/api/activities/home", methods=['GET'])
-@xray_recorder.capture('activities_home')
+#@xray_recorder.capture('activities_home')
 def data_home():
   access_token = extract_access_token(request.headers)
   try:
