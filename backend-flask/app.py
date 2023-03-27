@@ -14,7 +14,7 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
-#from services.users_short import *
+from services.users_short import *
 
 #import token verifier
 #from lib.cognito_jwt_token import TokenVerifyError, CognitoJwtToken
@@ -65,8 +65,8 @@ provider.add_span_processor(processor)
 # turned off xray
 # X-RAY2----to start the recorder
 # AWS_XRAY_URL - endpoint where to send the data
-xray_url = os.getenv("AWS_XRAY_URL")
-xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+#xray_url = os.getenv("AWS_XRAY_URL")
+#xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
 # OTEL
 # Show this in the logs within the backend-flask app (STDOUT)
@@ -198,8 +198,8 @@ def data_messages(message_group_uuid):
     app.logger.debug(e)
     return {}, 401
 
-# @app.route("/api/messages", methods=['POST','OPTIONS'])
-# @cross_origin()
+@app.route("/api/messages", methods=['POST','OPTIONS'])
+@cross_origin()
 # def data_create_message():
 #   user_sender_handle = 'andrewbrown'
 #   user_receiver_handle = request.json['user_receiver_handle']
