@@ -298,7 +298,7 @@ def data_search():
 @cross_origin()
 def data_activities():
   #removed hardcoded value
-  user_handle  = request.json['user_handle']
+  user_handle  = 'roopish'#request.json['user_handle']
   message = request.json['message']
   print('here')
   ttl = request.json['ttl']
@@ -318,7 +318,7 @@ def data_show_activity(activity_uuid):
 @app.route("/api/activities/<string:activity_uuid>/reply", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_activities_reply(activity_uuid):
-  user_handle  = 'andrewbrown'
+  user_handle  = 'roopish'#'andrewbrown'
   message = request.json['message']
   model = CreateReply.run(message, user_handle, activity_uuid)
   if model['errors'] is not None:
