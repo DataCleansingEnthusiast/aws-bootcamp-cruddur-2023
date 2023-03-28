@@ -153,7 +153,7 @@ def data_message_groups():
     app.logger.debug("--authenticate request--")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
-
+    
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
     if model['errors'] is not None:
       return model['errors'], 422
@@ -182,7 +182,7 @@ def data_messages(message_group_uuid):
   try:
     claims = cognito_jwt_token.verify(access_token)
     # authenicatied request
-    app.logger.debug("--authenticated----")
+    app.logger.debug("--authenticated---")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
     
@@ -190,7 +190,7 @@ def data_messages(message_group_uuid):
         cognito_user_id=cognito_user_id,
         message_group_uuid=message_group_uuid
       )
-    app.logger.debug("--done----")   
+      
     if model['errors'] is not None:
       return model['errors'], 422
     else:
@@ -270,7 +270,8 @@ def data_home():
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
-def notifications_home():
+def data_notifications():
+   #notifications_home():
   data = NotificationsActivities.run()
   return data, 200
 
@@ -299,6 +300,7 @@ def data_activities():
   #removed hardcoded value
   user_handle  = request.json['user_handle']
   message = request.json['message']
+  print('here')
   ttl = request.json['ttl']
   model = CreateActivity.run(message, user_handle, ttl)
   if model['errors'] is not None:
