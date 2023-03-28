@@ -51,13 +51,13 @@ def get_user_uuids():
   #we pass these 2 handles to sql above to get uuid,display_name,
   #handle that gets passed to create_message
   users = db.query_array_json(sql,{
-    'my_handle':  'andrewbrown',
+    'my_handle':  'roopish',
     'other_handle': 'bayko'
   })
 #expecting my DB to have andrewbrown and bayko refer ./bin/db/seed.sql 
 #look for handle that matches 'andrewbrown' and return the item and assign it to my_user
 #'bayko' to other_user
-  my_user    = next((item for item in users if item["handle"] == 'andrewbrown'), None)
+  my_user    = next((item for item in users if item["handle"] == 'roopish'), None)
   other_user = next((item for item in users if item["handle"] == 'bayko'), None)
   results = {
     'my_user': my_user,

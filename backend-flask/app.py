@@ -105,7 +105,6 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
-
 # Cloudwatch logs
 # @app.after_request
 # def after_request(response):
@@ -154,6 +153,7 @@ def data_message_groups():
     app.logger.debug("--authenticate request--")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
+
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
     if model['errors'] is not None:
       return model['errors'], 422
@@ -182,13 +182,15 @@ def data_messages(message_group_uuid):
   try:
     claims = cognito_jwt_token.verify(access_token)
     # authenicatied request
-    app.logger.debug("authenicated")
+    app.logger.debug("--authenticated----")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
+    
     model = Messages.run(
         cognito_user_id=cognito_user_id,
         message_group_uuid=message_group_uuid
       )
+    app.logger.debug("--done----")   
     if model['errors'] is not None:
       return model['errors'], 422
     else:
@@ -213,6 +215,7 @@ def data_messages(message_group_uuid):
 #   return
 
 def data_create_message():
+  
   message_group_uuid   = request.json.get('message_group_uuid',None)
   user_receiver_handle = request.json.get('handle',None)
   message = request.json['message']
@@ -220,7 +223,7 @@ def data_create_message():
   try:
     claims = cognito_jwt_token.verify(access_token)
     # authenicatied request
-    app.logger.debug("authenicated")
+    app.logger.debug("authenticated")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
     if message_group_uuid == None:
@@ -255,7 +258,7 @@ def data_home():
   try:
     claims = cognito_jwt_token.verify(access_token)
     # authenicatied request
-    app.logger.debug("authenicated")
+    app.logger.debug("-- app authenticated----")
     app.logger.debug(claims)
     app.logger.debug(claims['username'])
     data = HomeActivities.run(cognito_user_id=claims['username'])
