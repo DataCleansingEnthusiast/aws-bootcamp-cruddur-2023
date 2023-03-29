@@ -8,15 +8,24 @@ import botocore.exceptions
 class Ddb:
   def client():
     endpoint_url = os.getenv("AWS_ENDPOINT_URL")
+    
+
     if endpoint_url:
       attrs = { 'endpoint_url': endpoint_url }
     else:
       attrs = {}
+    print('-----==-ddb.py-----',endpoint_url)
+    
     dynamodb = boto3.client('dynamodb',**attrs)
     return dynamodb
+
   def list_message_groups(client,my_user_uuid):
+    print('IN list_message_groups-----')
+
     year = str(datetime.now().year)
     table_name = 'cruddur-messages'
+    print(my_user_uuid)
+
     query_params = {
       'TableName': table_name,
       'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
@@ -78,7 +87,7 @@ class Ddb:
     now = datetime.now(timezone.utc).astimezone().isoformat()
     created_at = now
     message_uuid = str(uuid.uuid4())
-
+    print('In dd.py create_message---',my_user_uuid)
     record = {
       'pk':   {'S': f"MSG#{message_group_uuid}"},
       'sk':   {'S': created_at },
@@ -107,7 +116,7 @@ class Ddb:
   def create_message_group(client, message,my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid, other_user_display_name, other_user_handle):
     print('== create_message_group.1')
     table_name = 'cruddur-messages'
-
+    print('In dd.py create_message_group1 ---',my_user_uuid)
     message_group_uuid = str(uuid.uuid4())
     message_uuid = str(uuid.uuid4())
     now = datetime.now(timezone.utc).astimezone().isoformat()
@@ -157,6 +166,7 @@ class Ddb:
 
     try:
       print('== create_message_group.try')
+
       # Begin the transaction
       response = client.batch_write_item(RequestItems=items)
       return {

@@ -153,7 +153,10 @@ def data_message_groups():
     app.logger.debug("--authenticate request--")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
-    
+    app.logger.debug('---in app.py data_message_groups:----')
+    app.logger.debug(cognito_user_id)
+    app.logger.debug('------------')
+
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
     if model['errors'] is not None:
       return model['errors'], 422
@@ -185,7 +188,9 @@ def data_messages(message_group_uuid):
     app.logger.debug("--authenticated---")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
+    app.logger.debug(---'in app.py data_messages:-----')
     
+    app.logger.debug(cognito_user_id)
     model = Messages.run(
         cognito_user_id=cognito_user_id,
         message_group_uuid=message_group_uuid
@@ -226,6 +231,8 @@ def data_create_message():
     app.logger.debug("authenticated")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
+    app.logger.debug(---'in app.py data_create_message:-----')
+    app.logger.debug(cognito_user_id)
     if message_group_uuid == None:
       # Create for the first time
       model = CreateMessage.run(
@@ -261,6 +268,7 @@ def data_home():
     app.logger.debug("-- app authenticated----")
     app.logger.debug(claims)
     app.logger.debug(claims['username'])
+    #app.logger.debug(---'in app.py data_home:-----',cognito_user_id)
     data = HomeActivities.run(cognito_user_id=claims['username'])
   except TokenVerifyError as e:
     # unauthenicatied request

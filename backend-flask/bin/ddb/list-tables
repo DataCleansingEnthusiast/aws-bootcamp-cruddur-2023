@@ -6,7 +6,7 @@ if [ "$1" = "prod" ]; then  #needs a space after prod
 else
   ENDPOINT_URL="--endpoint-url=http://localhost:8000"
 fi
-
+echo "in list-tables: $ENDPOINT_URL"
 aws dynamodb list-tables $ENDPOINT_URL \
 --query TableNames \
 --output table

@@ -78,7 +78,7 @@ def create_message_group(client,message_group_uuid, my_user_uuid, last_message_a
     'user_display_name': {'S': other_user_display_name},
     'user_handle': {'S': other_user_handle}
   }
-
+  print('In seed create_message_group---',my_user_uuid)
   response = client.put_item(
     TableName=table_name,
     Item=record
@@ -97,6 +97,7 @@ def create_message(client,message_group_uuid, created_at, message, my_user_uuid,
     'user_display_name': {'S': my_user_display_name},
     'user_handle': {'S': my_user_handle}
   }
+  print('In seed create_message---',my_user_uuid)
   # insert the record into the table
   response = client.put_item(
     TableName=table_name,
