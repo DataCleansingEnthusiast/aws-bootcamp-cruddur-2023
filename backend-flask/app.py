@@ -155,7 +155,6 @@ def data_message_groups():
     cognito_user_id = claims['sub']
     app.logger.debug('---in app.py data_message_groups:----')
     app.logger.debug(cognito_user_id)
-    app.logger.debug('------------')
 
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
     if model['errors'] is not None:
@@ -188,10 +187,10 @@ def data_messages(message_group_uuid):
     app.logger.debug("--authenticated---")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
-    app.logger.debug('in app.py data_messages-----')
+    app.logger.debug('--in app.py data_messages-----')
     
     app.logger.debug(cognito_user_id)
-    app.logger.debug('test')
+
     model = Messages.run(
         cognito_user_id=cognito_user_id,
         message_group_uuid=message_group_uuid
@@ -232,7 +231,7 @@ def data_create_message():
     app.logger.debug("authenticated")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
-    app.logger.debug(---'in app.py data_create_message:-----')
+    app.logger.debug('in app.py data_create_message:-----')
     app.logger.debug(cognito_user_id)
     if message_group_uuid == None:
       # Create for the first time
