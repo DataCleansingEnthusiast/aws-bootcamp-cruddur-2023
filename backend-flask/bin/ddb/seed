@@ -258,7 +258,7 @@ for i in range(len(lines)):
     raise 'invalid line'
 
 #step3
-  created_at = (now + timedelta(minutes=i)).isoformat()
+  created_at = (now + timedelta(hours=-3) + timedelta(minutes=i)).isoformat()
   create_message(
     client=ddb,
     message_group_uuid=message_group_uuid,
