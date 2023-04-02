@@ -1,7 +1,8 @@
 # Week 5 — DynamoDB and Serverless Caching
 ### Data Modelling a Direct Messaging System using Single Table Design
 
-I used Andrew Brown’s Lucid chart as a reference ![Lucid Chart - Data Model](./assets/week5_DataModel.PNG) and ![Data Model in excel](./assets/week5_DataModel2.PNG) to visualize data patterns. We have all the data in a single table because all the data in that table are related and this reduces complexity when it comes to management.
+I used Andrew Brown’s Lucid chart as a reference ![Lucid Chart - Data Model](./assets/week5_DataModel.PNG) 
+and ![Data Model in excel](./assets/week5_DataModel2.PNG) to visualize data patterns. We have all the data in a single table because all the data in that table are related and this reduces complexity when it comes to management.
 
 ### DynamoDB Utility Scripts
 
@@ -22,16 +23,16 @@ We have a choice of using either CLI, SDK or aws console to create DynamoDB tabl
 In [bin/db/setup](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db/setup), the following was edited: 
 
 ```bash
-    bin_path="$(realpath .)/bin"
-		source "$bin_path/db/drop"
-		source "$bin_path/db/create"
-		source "$bin_path/db/schema-load"
-		source "$bin_path/db/seed"
+	bin_path="$(realpath .)/bin"
+	source "$bin_path/db/drop"
+	source "$bin_path/db/create"
+	source "$bin_path/db/schema-load"
+	source "$bin_path/db/seed"
   ```  
 
-After compose up, ran schema-load , and it created our local DynamoDB table. ![Create DynamoDB table](./assets/week5_schemaload.PNG)
+After docker compose up, ran schema-load , and it created our local DynamoDB table. ![Create DynamoDB table](./assets/week5_schemaload.PNG)
 
-We need a way to show what we have. Created new file in ddb named list-tables. ![List Tables](./assets/week5_listTables.PNG)
+We need a way to show what tables we have. so we Created a new file in ddb named list-tables. ![List Tables](./assets/week5_listTables.PNG)
 
 CLI Command to check the Table 
 
@@ -41,11 +42,14 @@ Updated the file `backend-flask/db/seed.sql` and loaded it. ![seed.sql](./asset
 
 We want to see the data we're seeding, so in ddb, we create scan and set it for local DynamoDB only, because doing a scan in production can be expensive. Created new folder in ddb named patterns (for implementing access patterns), then created 2 new files: get-conversation and list-conversations
 
-`![Cruddur Messages Table](./assets/`week5_cruddurmessages_table.PNG)
+![Cruddur Messages Table](./assets/week5_cruddurmessages_table.PNG)
 
-To drop the tables we created we created a file ‘drop’  `![Connect to prod](./assets/`week5_droptable.PNG)
+To drop the tables we created we created a file ‘drop’  
+![Connect to prod](./assets/week5_droptable.PNG)
+
 
 ![List Conversations Start](./assets/week5_listconversationsBegin.PNG)
+
 
 ![List Conversations end](./assets/week5_listconversations.PNG)
 
@@ -60,11 +64,12 @@ cd backend-flask
 pip install -r requirements.txt
 ```
 
-We updated our psql command in bin/db/drop to drop the database IF EXISTS. Next step is to docker compose up and login to our app and click on ‘messages’. ![List conversation app](./assets/week5_conv1.PNG)
+We updated our psql command in [bin/db/drop](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db/drop)
+to drop the database IF EXISTS. Next step is to docker compose up and login to our app and click on ‘messages’. ![List conversation app](./assets/week5_conv1.PNG)
 
-We implemented backend-flask/lib/[ddb.py](http://ddb.py/). We learnt the difference between the Postgres database in [db.py](http://db.py/) and what we're implementing in [ddb.py](http://ddb.py/). In the Postgres database, we are doing initialization, using a constructor to create an instance of the class, and in [ddb.py](http://ddb.py/) it's a stateless class. If you can do things without state, it's much easier for testing, as you just test the inputs and outputs, using simple data structures.
+We implemented [backend-flask/lib/ddb.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/ddb.py). We learnt the difference between the Postgres database in db.py and what we're implementing in ddb.py. In the Postgres database, we are doing initialization, using a constructor to create an instance of the class, and ddb.py is a stateless class. If you can do things without state, it's much easier for testing, as you just test the inputs and outputs, using simple data structures.
 
-We created a new folder in backend-flask/bin named cognito, then a new file in the folder named list-users. We replaced hardcoded 'user_handle' value with my own username "roopish" in [app.py](http://app.py/) under the /api/activities route. To list Cognito users through the AWS CLI, we need the user pool id. From terminal, we run the following: `aws cognito-idp list-users --user-pool-id=us-east-1_xxx`
+We created a new folder in backend-flask/bin called cognito, then a new file in the folder named list-users. We replaced hardcoded 'user_handle' value with my own username "roopish" in [app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) under the /api/activities route. To list Cognito users through the AWS CLI, we need the user pool id. From terminal, we run the following: `aws cognito-idp list-users --user-pool-id=us-east-1_xxx`
 
 ![List users](./assets/week5_conv2.PNG)
 
@@ -126,11 +131,11 @@ We created a Lambda function to run for every time we create a message in Cruddu
 
 We then added Policy to this Lambda function
 
-![Lambda_Addpolicy_step1](./assets/week5_Lambda_Addpolicy.PNG) 
+![Lambda_Addpolicy_step1](./assets/week5_Lambda_Addpolicy.png) 
 
-![Lambda_Addpolicy_step2](./assets/week5_Lambda_Addpolicy2.PNG)
+![Lambda_Addpolicy_step2](./assets/week5_Lambda_Addpolicy2.png)
 
-![Attach role to policy](./assets/week5_AttachPolicyToRole.PNG)
+![Attach role to policy](./assets/week5_AttachPolicyToRole.png)
 
 AWS did not give us the role permissions we needed for our function to operate correctly. After realizing the need for a global secondary index, the following two code blocks were added to the `backend/bin/ddb/schema-load` file:
 
@@ -176,9 +181,9 @@ Now we hook up our application to use production data. We went back over to dock
 
 We specified our ARNs for our resources, created a new folder inside our aws folder, then created a new json file named cruddur-messaging-stream and pasted the json from the policy we just created. We then added our Lambda code to our repository as well. For our policy, we named it cruddur-messaging-stream-dynamodb and saved it. With the new policy enabled, we tested again.
 
-![Attach Policy step1](./assets/week5_conv11.PNG)
+![Attach Policy step1](./assets/week5_conv11.png)
 
-![Attach Policy step 2](./assets/week5_conv12.PNG) 
+![Attach Policy step 2](./assets/week5_conv12.png) 
 
 ![Create Policy](./assets/week5_conv13.PNG)  
 
