@@ -95,9 +95,10 @@ We updated App.js and MessageForm.js to include our @:handle and our message_gro
 
 ![Output after adding message group uuid](./assets/week5_conv6.PNG)
 
-We also updated [ddb.py](http://ddb.py/) to remove hardcoded year and use year = str(datetime.now().year). After making all these changes we docker-compose up and these are the screenshots below
+We also updated **ddb.py** to remove hardcoded year and use year = str(datetime.now().year). After making all these changes we docker-compose up and these are the screenshots below
 
-After running a setup ![SetUp environ](./assets/week5_conv7_setup.PNG) and after seeding ![Seed](./assets/week5_conv7_seed.PNG). When we run get-conversations, below are the 3 screenshots ![Get Conversation step1](./assets/week5_conv7_getConv1.PNG)
+After running a setup ![SetUp environ](./assets/week5_conv7_setup.PNG) and after seeding ![Seed](./assets/week5_conv7_seed.PNG). When we run get-conversations, below are the 3 screenshots 
+![Get Conversation step1](./assets/week5_conv7_getConv1.PNG)
 
 ![Get Conversation step2](./assets/week5_conv7_getConv2.PNG). Below is the screenshot of the app with correct time  ![Get Conversation from app](./assets/week5_conv8.PNG)
 
@@ -107,9 +108,13 @@ We insert a user ‘londo’ to SQL query locally through the terminal after con
 
 ### DynamoDB Stream
 
-We have to create a Dynamo DB Stream trigger to update the message groups in the production environment. To start this, we ran ./bin/ddb/schema-load prod. We then logged into AWS and checked DynamoDB to see our new table.  ![Prod Table created](./assets/week5_DDBProd_TableCreated.PNG).
+We have to create a Dynamo DB Stream trigger to update the message groups in the production environment. To start this, we ran ./bin/ddb/schema-load prod. We then logged into AWS and checked DynamoDB to see our new table.  
 
-Next step is to turn on streaming through the console. ![Turn on Streaming](./assets/week5_DDBProd_StreamTurnedOn.PNG)
+![Prod Table created](./assets/week5_DDBProd_TableCreated.PNG).
+
+Next step is to turn on streaming through the console. 
+
+![Turn on Streaming](./assets/week5_DDBProd_StreamTurnedOn.PNG)
 
 We created a VPC endpoint for the DynamoDB service, but had concerns as it may cost money. We looked into it and gateway endpoints, which are whats used for connecting to DynamoDB, do not incur additional money. Created VPC endpoint in AWS named ddb-cruddur then connected it to DynamoDB as a service as seen in these 3 screenshots
 
@@ -135,7 +140,7 @@ We then added Policy to this Lambda function
 
 ![Lambda_Addpolicy_step2](./assets/week5_Lambda_Addpolicy2.png)
 
-![Attach role to policy](./assets/week5_AttachPolicyToRole.png)
+![Attach role to policy](./assets/week5_AttachPolicyToRole.PNG)
 
 AWS did not give us the role permissions we needed for our function to operate correctly. After realizing the need for a global secondary index, the following two code blocks were added to the `backend/bin/ddb/schema-load` file:
 
@@ -177,19 +182,22 @@ From the AWS console, we navigate to Lambda, then created a new trigger named cr
 
 ![Create Trigger step3](./assets/week5_CreateTrigger3.PNG)
 
-Now we hook up our application to use production data. We went back over to docker-compose.yml and commented out the AWS_ENDPOINT_URL variable. After docker compose up, when we go to our app we should see seed data. We click on Messages and append new/bayko to the URL and should be able to send messages to bayko ![Send message](./assets/week5_SendMessageToBayko.PNG)
+Now we hook up our application to use production data. We went back over to docker-compose.yml and commented out the AWS_ENDPOINT_URL variable. After docker compose up, when we go to our app we should see seed data. We click on Messages and append new/bayko to the URL and should be able to send messages to bayko 
+![Send message](./assets/week5_SendMessageToBayko.PNG)
 
 We specified our ARNs for our resources, created a new folder inside our aws folder, then created a new json file named cruddur-messaging-stream and pasted the json from the policy we just created. We then added our Lambda code to our repository as well. For our policy, we named it cruddur-messaging-stream-dynamodb and saved it. With the new policy enabled, we tested again.
 
-![Attach Policy step1](./assets/week5_conv11.png)
+![Attach Policy step1](./assets/week5_conv11.PNG)
 
-![Attach Policy step 2](./assets/week5_conv12.png) 
+![Attach Policy step 2](./assets/week5_conv12.PNG) 
 
 ![Create Policy](./assets/week5_conv13.PNG)  
 
 ![Attach Policy step 3](./assets/week5_AttachPolicyToRole.PNG)
 
-Delete all the messages in AWS console ![Delete previous message](./assets/week5_conv13_deleteitems.PNG) 
+Delete all the messages in AWS console 
+
+![Delete previous message](./assets/week5_conv13_deleteitems.PNG) 
 
 ![After message is posted](./assets/week5_conv14.PNG)
 
