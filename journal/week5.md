@@ -41,7 +41,7 @@ We need a way to show what tables we have. so we Created a new file in ddb named
 
 CLI Command to check the Table 
 
-`aws dynamodb list-tables --endpoint-url [http://localhost:8000](http://localhost:8000/)`
+`aws dynamodb list-tables --endpoint-url http://localhost:8000/`
 
 Updated the file `backend-flask/db/seed.sql` and loaded it. ![seed.sql](./assets/week5_loadpopulate_tables.PNG)
 
