@@ -1,12 +1,17 @@
 # Week 5 — DynamoDB and Serverless Caching
 ### Data Modelling a Direct Messaging System using Single Table Design
 
-I used Andrew Brown’s Lucid chart as a reference ![Lucid Chart - Data Model](./assets/week5_DataModel.PNG) 
-and ![Data Model in excel](./assets/week5_DataModel2.PNG) to visualize data patterns. We have all the data in a single table because all the data in that table are related and this reduces complexity when it comes to management.
+I used Andrew Brown’s Lucid chart as a reference
+
+![Lucid Chart - Data Model](./assets/week5_DataModel.PNG) 
+and ![Data Model in excel](./assets/week5_DataModel2.PNG) 
+to visualize data patterns. We have all the data in a single table because all the data in that table are related and this reduces complexity when it comes to management.
 
 ### DynamoDB Utility Scripts
 
-We added boto3 to requirements.txt and ran pip install -r requirements.txt  ![boto install](./assets/week5_Intallboto3.PNG). 
+We added boto3 to requirements.txt and ran pip install -r requirements.txt  
+
+![boto install](./assets/week5_Intallboto3.PNG). 
 
 We also rearranged some folders in the backend-flask directory and created ddb folder for DynamoDB related files. 
 
@@ -20,7 +25,7 @@ bin
 
 We have a choice of using either CLI, SDK or aws console to create DynamoDB tables but in this bootcamp we chose SDK. 
 
-In [bin/db/setup](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db/setup), the following was edited: 
+In [bin/db/setup](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db/setup), the following was edited i.e file structure and name: 
 
 ```bash
 	bin_path="$(realpath .)/bin"
@@ -55,19 +60,19 @@ To drop the tables we created we created a file ‘drop’
 
 ## ****Implement Conversations with DynamoDB****
 
-We make a small addition to gitpod.yml. We updated flask to avoid pip install everytime.
+We made a small addition to gitpod.yml. We updated flask to avoid pip install everytime.
 
 ```markup
 name: flask
 command: |
-cd backend-flask
-pip install -r requirements.txt
+  cd backend-flask
+  pip install -r requirements.txt
 ```
 
 We updated our psql command in [bin/db/drop](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/bin/db/drop)
 to drop the database IF EXISTS. Next step is to docker compose up and login to our app and click on ‘messages’. ![List conversation app](./assets/week5_conv1.PNG)
 
-We implemented [backend-flask/lib/ddb.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/ddb.py). We learnt the difference between the Postgres database in db.py and what we're implementing in ddb.py. In the Postgres database, we are doing initialization, using a constructor to create an instance of the class, and ddb.py is a stateless class. If you can do things without state, it's much easier for testing, as you just test the inputs and outputs, using simple data structures.
+We implemented [backend-flask/lib/ddb.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/ddb.py). We learnt the difference between the Postgres database in db.py and what we are implementing in ddb.py. In the Postgres database, we are doing initialization, using a constructor to create an instance of the class, and ddb.py is a stateless class. If you can do things without state, it's much easier for testing, as you just test the inputs and outputs, using simple data structures.
 
 We created a new folder in backend-flask/bin called cognito, then a new file in the folder named list-users. We replaced hardcoded 'user_handle' value with my own username "roopish" in [app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) under the /api/activities route. To list Cognito users through the AWS CLI, we need the user pool id. From terminal, we run the following: `aws cognito-idp list-users --user-pool-id=us-east-1_xxx`
 
@@ -89,7 +94,7 @@ We updated HomeFeedPage.js, MessageGroupsPage.js, MessageGroupPage.js, and Messa
 
 Added AWS_ENDPOINT_URL variable to our docker-compose.yml file. 
 
-`AWS_ENDPOINT_URL: "[http://dynamodb-local:8000](http://dynamodb-local:8000/)"`
+`AWS_ENDPOINT_URL: "http://dynamodb-local:8000/"`
 
 We updated App.js and MessageForm.js to include our @:handle and our message_group_uuid
 
