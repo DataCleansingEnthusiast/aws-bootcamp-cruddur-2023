@@ -1,44 +1,57 @@
-{
-    "cluster": "cruddur",
-    "launchType": "FARGATE",
-    "desiredCount": 1,
-    "enableECSManagedTags": true,
-    "enableExecuteCommand": true,
-    "loadBalancers": [
-      {
-          "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:192212780887:targetgroup/cruddur-frontend-react-js/26a23d23d6e07ec9",
-          "containerName": "frontend-react-js",
-          "containerPort": 3000
-      }
+ {
+    "family": "frontend-react-js",
+    "executionRoleArn": "arn:aws:iam::192212780887:role/CruddurServiceExecutionRole",
+    "taskRoleArn": "arn:aws:iam::192212780887:role/CruddurTaskRole",
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512",
+    "requiresCompatibilities": [ 
+      "FARGATE" 
     ],
-    "networkConfiguration": {
-      "awsvpcConfiguration": {
-        "assignPublicIp": "ENABLED",
-        "securityGroups": [
-          "sg-07022ea663e4ef4f4"
-        ],
-        "subnets": [
-            "subnet-00d8b1de92a3f8787"
-            ,"subnet-0f0d0a2681a2e1420"
-            ,"subnet-0865fc431616cf823"
-            ,"subnet-091199e7cd6230f8e"
-            ,"subnet-0402753bcd6e74b27"
-            ,"subnet-0898d5e9178ba2821"
+    "containerDefinitions": [
+      {
+        "name": "xray",
+        "image": "public.ecr.aws/xray/aws-xray-daemon" ,
+        "essential": true,
+        "user": "1337",
+        "portMappings": [
+          {
+            "name": "xray",
+            "containerPort": 2000,
+            "protocol": "udp"
+          }
         ]
-      }
-    },
-    "propagateTags": "SERVICE",
-    "serviceName": "frontend-react-js",
-    "taskDefinition": "frontend-react-js",
-    "serviceConnectConfiguration": {
-      "enabled": true,
-      "namespace": "cruddur",
-      "services": [
-        {
-          "portName": "frontend-react-js",
-          "discoveryName": "frontend-react-js",
-          "clientAliases": [{"port": 3000}]
+      },
+      {
+        "name": "frontend-react-js",
+        "image": "192212780887.dkr.ecr.us-east-1.amazonaws.com/frontend-react-js",
+        "essential": true,
+        "healthCheck": {
+          "command": [
+            "CMD-SHELL",
+            "curl -f http://localhost:3000 || exit 1"
+          ],
+          "interval": 30,
+          "timeout": 5,
+          "retries": 3
+        },
+        "portMappings": [
+          {
+            "name": "frontend-react-js",
+            "containerPort": 3000,
+            "protocol": "tcp", 
+            "appProtocol": "http"
+          }
+        ],
+  
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "cruddur",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "frontend-react-js"
+          }
         }
-      ]
-    }
+      }
+    ]
   }
