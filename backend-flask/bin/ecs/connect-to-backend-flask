@@ -7,17 +7,13 @@ fi
 TASK_ID=$1
 
 
-if [ -z "$2" ]; then
-  echo "No CONTAINER_NAME argument supplied eg ./bin/ecs/connect-to-service e9f4fe072db748e18650bb10eab29a90 backend-flask"
-  exit 1 
-fi
-CONTAINER_NAME=$2
+backend-flask
 
 
 aws ecs execute-command  \
 --region $AWS_DEFAULT_REGION \
 --cluster cruddur \
 --task $TASK_ID \
---container $CONTAINER_NAME \
---command "/bin/bash" \
+--container backend-flask \
+--command "/bin/sh" \
 --interactive
