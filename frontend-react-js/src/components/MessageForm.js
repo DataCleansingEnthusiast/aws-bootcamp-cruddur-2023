@@ -18,7 +18,7 @@ export default function ActivityForm(props) {
     event.preventDefault();
     try {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/messages`
-      console.log('onsubmit payload', message)
+      console.log('onsubmit payload in MessageForm', message)
       let json = { 'message': message }
       if (params.handle) {
         json.handle = params.handle
