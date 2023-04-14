@@ -32,7 +32,7 @@ from time import strftime
 # cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
 # LOGGER.addHandler(console_handler)
 # LOGGER.addHandler(cw_handler)
-# LOGGER.info("Test log");
+# LOGGER.info("Start log for Cruddur");
 
 # X-RAY2---
 from aws_xray_sdk.core import xray_recorder
