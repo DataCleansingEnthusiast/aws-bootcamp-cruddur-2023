@@ -109,7 +109,7 @@ def create_message(client,message_group_uuid, created_at, message, my_user_uuid,
 #step 8
 #hardcoded uuid but our system would do this str(uuid.uuid84());
 message_group_uuid = "5ae290ed-55d1-47a0-bc6d-fe2bc2700399" 
-now = datetime.now(timezone.utc).astimezone()
+now = datetime.now() #(timezone.utc).astimezone()
 users = get_user_uuids()
 
 #step 9
@@ -258,7 +258,8 @@ for i in range(len(lines)):
     raise 'invalid line'
 
 #step3
-  created_at = (now + timedelta(hours=-3) + timedelta(minutes=i)).isoformat()
+  #created_at = (now + timedelta(hours=-3) + timedelta(minutes=i)).isoformat()
+  created_at = (now - timedelta(days=1) + timedelta(minutes=i)).isoformat()
   create_message(
     client=ddb,
     message_group_uuid=message_group_uuid,
