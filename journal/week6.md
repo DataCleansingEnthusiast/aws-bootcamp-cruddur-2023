@@ -139,7 +139,6 @@ aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/OTEL_
 ![paramstore3](./assets/week6_18C.PNG)
 ![paramstore4](./assets/week6_18D.PNG)
 ![paramstore5](./assets/week6_18E.PNG)
-![paramstore6](./assets/week6_18F.PNG)
 ![aws parameter store](./assets/week6_18G_AWSconsoleASM.PNG)
 
 ### Create Task and Execution Roles for Task Definition
@@ -191,6 +190,7 @@ aws iam attach-role-policy \
 
 #### Create TaskRole
 
+```aws
 aws iam put-role-policy \
   --policy-name SSMAccessPolicy \
   --role-name CruddurTaskRole \
@@ -207,7 +207,8 @@ aws iam put-role-policy \
     \"Resource\":\"*\"
   }]
 }"
-
+```
+```
 aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess --role-name CruddurTaskRole
 aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess --role-name CruddurTaskRole
 ```
@@ -256,7 +257,7 @@ echo $DEFAULT_SUBNET_IDS
 ![SecurityGroupVerified](./assets/week6_24_SecurityGroup_verified.PNG)
 
 
-Edit more permission to ECR to execute ECS
+Edit permissions to ECR to execute ECS
 
 ![edit CruddurServiceExecutionPolicy](./assets/Week6_25_CruddurServiceExecutionPolicy.PNG)
 
@@ -311,7 +312,7 @@ aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-j
 
 ![ecs service backend-flask](./assets/week6_28_CreateService.PNG)
 
-![ecs execute command ](./assets/(week6_29_InOurContainer.PNG)
+![ecs execute command ](./assets/week6_29_InOurContainer.PNG)
 
 ![backend-flask health-check](./assets/week6_30_FlaskHealthCheck.PNG)
 
@@ -326,13 +327,13 @@ Update the security group for the backend-flask for port 4567 and run health che
 
 ![HealthCheckafterPortChange](./assets/week6_33_HealthCheckAfterPortChange.PNG)
 
-![backend-flask test connection]./assets/(week6_34_TestConnect.png)
+![backend-flask test connection](./assets/week6_34_TestConnect.PNG)
 
 
 **Create a LOAD BALANCER on the AWS console**
 
  a) Create Application Load Balancer cruddur-alb, Internet-facing, IPv4 address type
- ![image](./assets/week6_35_AccessThroOnlyALB.png)
+ ![image](./assets/week6_35_AccessThroOnlyALB.PNG)
 
 ### create the aws ecs service and add the Load balancer
 
@@ -432,7 +433,7 @@ Test my website https://roopish-awssolutions.com/
 
 # Securing Flask
 
-change the ports 443 and 80 to access only my ip.
+change the ports 443 and 80 to access only my ip and then test the api.
 ![Testing json](./assets/week6_46_JSONAfterSecuringFlask.PNG)
 
 
