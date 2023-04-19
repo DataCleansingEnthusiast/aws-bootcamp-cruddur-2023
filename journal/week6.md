@@ -172,9 +172,9 @@ aws iam put-role-policy \
 "
 ```
 
-![ExecutionRole step2](week6_19_ExecutionRole_2.PNG)
+![ExecutionRole step2](./assets/week6_19_ExecutionRole_2.PNG)
 
-![ExecutionRole step3](week6_19_ExecutionRole_3.PNG)
+![ExecutionRole step3](./assets/week6_19_ExecutionRole_3.PNG)
 
 ```sh
 aws iam attach-role-policy --policy-arn POLICY_ARN --role-name CruddurServiceExecutionRole
@@ -309,29 +309,29 @@ aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.js
 aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-js.json
 ```
 
-![ecs service backend-flask](week6_28_CreateService.PNG)
+![ecs service backend-flask](./assets/week6_28_CreateService.PNG)
 
-![ecs execute command ](week6_29_InOurContainer.PNG)
+![ecs execute command ]./assets/(week6_29_InOurContainer.PNG)
 
-![backend-flask health-check](week6_30_FlaskHealthCheck.PNG)
+![backend-flask health-check](./assets/week6_30_FlaskHealthCheck.PNG)
 
 ### Create a bash script to connect-to-service of ECS cluster
 
 [Backend connect](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/backend/connect)
 
-[TestConnect](week6_31_TestingConnectingusingCLI.PNG)
+[TestConnect](./assets/week6_31_TestingConnectingusingCLI.PNG)
 
 1. Update the security group for the backend-flask for port 4567 and run health check
 
-![HealthCheckafterPortChange](week6_33_HealthCheckAfterPortChange.png)
+![HealthCheckafterPortChange](./assets/week6_33_HealthCheckAfterPortChange.png)
 
-![backend-flask test connection](week6_34_TestConnect.png)
+![backend-flask test connection]./assets/(week6_34_TestConnect.png)
 
 
 **Create a LOAD BALANCER on the AWS console**
 
  a) Create Application Load Balancer cruddur-alb, Internet-facing, IPv4 address type
- ![image](week6_35_AccessThroOnlyALB.png)
+ ![image](./assets/week6_35_AccessThroOnlyALB.png)
 
 ### create the aws ecs service and add the Load balancer
 
@@ -340,20 +340,20 @@ Run the create service command
 ```aws
 aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.json
 ```
-![Create Service](week6_36_CreateService.png)
+![Create Service](./assets/week6_36_CreateService.png)
 
-![Add Load Balancer](week6_36_LoadBalancer.png)
+![Add Load Balancer](./assets/week6_36_LoadBalancer.png)
  
 
-![Target Group](week6_36_TargetGroup.PNG)
+![Target Group](./assets/week6_36_TargetGroup.PNG)
 
-![ALB health-check](week6_37_HealthCheckLoadBalancer.png)
+![ALB health-check](./assets/week6_37_HealthCheckLoadBalancer.png)
 
 ### Build the frontend-react-js
 
 Create production version of dockerfile [backend-flask/Dockerfile.prod](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/Dockerfile.prod)
 
-![Frontend](week6_38_CreateFrontend.png)
+![Frontend](./assets/week6_38_CreateFrontend.png)
 
 ### For Frontend React
 
@@ -366,26 +366,26 @@ We created a folder for building, Tag, Push, register and deploy the image
 aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-js.json
 ```
 
-![Frontend Target group](week6_38_CreateFrontendtg.PNG)
+![Frontend Target group](./assets/week6_38_CreateFrontendtg.PNG)
 
 **Made sure your RDS should be up and running i.e.using PROD-CONNECTION_URL**
 
 #### I created a Hosted domain name for my domainname using AWS Route 53
 
-![Created DNS](week6_39_CreateDNSrecords.png)
+![Created DNS](./assets/week6_39_CreateDNSrecords.png)
 
 
 #### Create a certificate manager to request for SSL certificate
 
-![certificate Manager](week6_40_CertificateIssued.png)
+![certificate Manager](./assets/week6_40_CertificateIssued.png)
 
 click on the create a record in Route53
 
-![Hosted zone details](week6_41_Records.png)
+![Hosted zone details](./assets/week6_41_Records.png)
 
 **EDIT the ALB to manage the rules**
 
-![ALB](week6_41_update_lb_listeners6_modify_rules.png)
+![ALB](./assets/week6_41_update_lb_listeners6_modify_rules.png)
 
 
 
@@ -393,11 +393,11 @@ Add a listener for redirecting to 443 to forward to frontend-react-js app with t
 
 **curl the dns and see whether it is working or not**
 
-![HealthCheck](week6_42_TestHealthCheck.PNG)
+![HealthCheck](./assets/week6_42_TestHealthCheck.PNG)
 
 **Test in the browser**
 
-![Browser check](week6_42_TestHealthCheck_browser.PNG)
+![Browser check](./assets/week6_42_TestHealthCheck_browser.PNG)
 
 **Edit the task definition for backend-flask with dns names
 ```json
@@ -424,15 +424,15 @@ echo $ECR_FRONTEND_REACT_URL
 
 Test my website https://roopish-awssolutions.com/
 
-![image](week6_45_Messages.PNG)
+![image](./assets/week6_45_Messages.PNG)
 
-![image](week6_45_Messagesaftersignin.PNG)
+![image](./assets/week6_45_Messagesaftersignin.PNG)
 
 
 # Securing Flask
 
 change the ports 443 and 80 to access only my ip.
-![Testing json](week6_46_JSONAfterSecuringFlask.PNG)
+![Testing json](./assets/week6_46_JSONAfterSecuringFlask.PNG)
 
 
 ### Created script file for the ECR Login
@@ -447,7 +447,7 @@ Run dynamodb schema-load ./bin/ddb/schema-load
 Run the dynamodb seed file ./bin/ddb/seed
 Test the app is working fine
 
-![image](week6_47_FixMessageInProduction.PNG)
+![image](./assets/week6_47_FixMessageInProduction.PNG)
 
 modify the code in the CheckAuth.js in frontend-react-js
 Modify the code in other files where the CheckAuth.js library is imported.
@@ -472,7 +472,7 @@ Push the backend image to ECR using the script ./bin/backend/push
 Deploy the backend service with force-deployment using the script ./bin/backend/deploy
 Connect to your postgresdb(rds) prod using the script ./bin/db/connect prod
 
-Test the frontend app using the [image](https://roopish-awssolutions.com/messages/new/bayko)
+Test the frontend app using the url [https://roopish-awssolutions.com/messages/new/bayko](https://roopish-awssolutions.com/messages/new/bayko)
 
 
 **Test #1**
@@ -495,13 +495,13 @@ d) Run ./bin/backend/deploy and ./bin/frontend/deploy
 After running Test #3, I get the error "'NoneType' object is not subscriptable" in the Rollbar and a 500 error in the when I inspect.
 
 Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rollbar`
- ![Error2](week6_52_Error2.png)
+ ![Error2](./assets/week6_52_Error2.png)
  
-![Error1](week6_52_Error1.png)
+![Error1](./assets/week6_52_Error1.png)
 
  `**Resolution:**` I talked to Andrew, during office hours and found that cognito_userid is different from the current_user_id. I updated the record with the correct cognito_user_id and it worked.
 
- ![post messages to dynamodb](week6_53_Output.png)
+ ![post messages to dynamodb](./assets/week6_53_Output.PNG)
 
 
  ### Fargate - Configuring for Container Insights
@@ -532,9 +532,9 @@ Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rol
  - Run ./bin/frontend/register
  - Run ./bin/frontend/deploy
 
- ![backend x-ray](week6_52_Healthybackend.PNG)
+ ![backend x-ray](./assets/week6_52_Healthybackend.PNG)
 
- ![frontend x-ray](week6_52_HealthyFrontend.PNG)
+ ![frontend x-ray](./assets/week6_52_HealthyFrontend.PNG)
 
 
 `Enable container insights'
@@ -544,23 +544,23 @@ Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rol
  - click on the  `update cluster' button to enable the container insights.
  - Select the monitor and 'Enable container insights'.
  - click on the update to apply the changes.
- - 
-![container insights](week6_52_ContainerInsightson.PNG)
+ 
+![container insights](./assets/week6_52_ContainerInsightson.PNG)
 
-![container insights](week6_52_ContainerInsights1.PNG)
+![container insights](./assets/week6_52_ContainerInsights1.PNG)
 
-![container insights](week6_52_ContainerInsights2.PNG)
+![container insights](./assets/week6_52_ContainerInsights2.PNG)
 
 
 ### Check the container insights in cloudwatch
 
-![cloudwatch container insight map view](week6_52_ContainerInsights4.PNG)
+![cloudwatch container insight map view](./assets/week6_52_ContainerInsights4.PNG)
 
-![cloudwatch container insight list view](week6_52_ContainerInsight3.PNG)
+![cloudwatch container insight list view](./assets/week6_52_ContainerInsight3.PNG)
 
-![backend task performance monitoring](week6_52_ContainerInsights5.PNG)
+![backend task performance monitoring](./assets/week6_52_ContainerInsights5.PNG)
 
-![frontend task performance monitoring](week6_52_ContainerInsights6.PNG)
+![frontend task performance monitoring](./assets/week6_52_ContainerInsights6.PNG)
 
 ### Generate environment variables into a file in the docker compose file to improve  docker networking
 using a ruby script to generate-env file and use this file in the docker compose file.
