@@ -213,7 +213,7 @@ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAc
 aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess --role-name CruddurTaskRole
 ```
 
-![CruddurTaskRole Policy](./assets/week6_21_TaskRolePolicy.png)
+![CruddurTaskRole Policy](./assets/week6_21_TaskRolePolicy.PNG)
 
 
 ### Create Json file
