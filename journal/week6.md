@@ -260,7 +260,7 @@ Edit more permission to ECR to execute ECS
 
 ![edit CruddurServiceExecutionPolicy](./assets/Week6_25_CruddurServiceExecutionPolicy.PNG)
 
-![ECS cluster backendflask](./assets/Week6_25_ECS cluster backendflask.png)
+![ECS cluster backendflask](./assets/Week6_25_ECSclusterbackendflask.PNG)
 
 ----------------------------
 ### Connection via Sessions Manaager (Fargate)
@@ -311,7 +311,7 @@ aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-j
 
 ![ecs service backend-flask](./assets/week6_28_CreateService.PNG)
 
-![ecs execute command ]./assets/(week6_29_InOurContainer.PNG)
+![ecs execute command ](./assets/(week6_29_InOurContainer.PNG)
 
 ![backend-flask health-check](./assets/week6_30_FlaskHealthCheck.PNG)
 
@@ -323,7 +323,7 @@ aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-j
 
 1. Update the security group for the backend-flask for port 4567 and run health check
 
-![HealthCheckafterPortChange](./assets/week6_33_HealthCheckAfterPortChange.png)
+![HealthCheckafterPortChange](./assets/week6_33_HealthCheckAfterPortChange.PNG)
 
 ![backend-flask test connection]./assets/(week6_34_TestConnect.png)
 
@@ -340,20 +340,20 @@ Run the create service command
 ```aws
 aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.json
 ```
-![Create Service](./assets/week6_36_CreateService.png)
+![Create Service](./assets/week6_36_CreateService.PNG)
 
-![Add Load Balancer](./assets/week6_36_LoadBalancer.png)
+![Add Load Balancer](./assets/week6_36_LoadBalancer.PNG)
  
 
 ![Target Group](./assets/week6_36_TargetGroup.PNG)
 
-![ALB health-check](./assets/week6_37_HealthCheckLoadBalancer.png)
+![ALB health-check](./assets/week6_37_HealthCheckLoadBalancer.PNG)
 
 ### Build the frontend-react-js
 
 Create production version of dockerfile [backend-flask/Dockerfile.prod](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/Dockerfile.prod)
 
-![Frontend](./assets/week6_38_CreateFrontend.png)
+![Frontend](./assets/week6_38_CreateFrontend.PNG)
 
 ### For Frontend React
 
@@ -372,20 +372,20 @@ aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-j
 
 #### I created a Hosted domain name for my domainname using AWS Route 53
 
-![Created DNS](./assets/week6_39_CreateDNSrecords.png)
+![Created DNS](./assets/week6_39_CreateDNSrecords.PNG)
 
 
 #### Create a certificate manager to request for SSL certificate
 
-![certificate Manager](./assets/week6_40_CertificateIssued.png)
+![certificate Manager](./assets/week6_40_CertificateIssued.PNG)
 
 click on the create a record in Route53
 
-![Hosted zone details](./assets/week6_41_Records.png)
+![Hosted zone details](./assets/week6_41_Records.PNG)
 
 **EDIT the ALB to manage the rules**
 
-![ALB](./assets/week6_41_update_lb_listeners6_modify_rules.png)
+![ALB](./assets/week6_41_update_lb_listeners6_modify_rules.PNG)
 
 
 
@@ -476,30 +476,32 @@ Test the frontend app using the url [https://roopish-awssolutions.com/messages/n
 
 
 **Test #1**
-a) Docker compose up with AWS_ENDPOINT_URL: "http://dynamodb-local:8000/"
-b) Run./bin/db/setup 
-c) Run ./bin/ddb/schema-load 
-d) Run ./bin/ddb/seed
-e) The frontend app Working fine with no issues in the posting the messages
+1) Docker compose up with AWS_ENDPOINT_URL: "http://dynamodb-local:8000/"
+2) Run./bin/db/setup 
+3) Run ./bin/ddb/schema-load 
+4) Run ./bin/ddb/seed
+5) The frontend app Working fine with no issues in the posting the messages
 
-**Test 2:**
-a) I commented out AWS_ENDPOINT_URL: "http://dynamodb-local:8000/"
-b) docker compose down and Compose up to pick the changes 
-c) I was able to post the messages without any issues with dynamodb prod and with local rds.
+**Test #2:**
+1) I commented out AWS_ENDPOINT_URL: "http://dynamodb-local:8000/"
+2) docker compose down and Compose up to pick the changes 
+3) I was able to post the messages without any issues with dynamodb prod and with local rds.
 
-**Test 3:**
-a) Run ./bin/backend/build and ./bin/frontend/build
-b) Run ./bin/backend/push and ./bin/frontend/push 
-c) Run ./bin/backend/register and ./bin/frontend/register
-d) Run ./bin/backend/deploy and ./bin/frontend/deploy
-After running Test #3, I get the error "'NoneType' object is not subscriptable" in the Rollbar and a 500 error in the when I inspect.
+**Test #3:**
+1) Run ./bin/backend/build and ./bin/frontend/build
+2) Run ./bin/backend/push and ./bin/frontend/push 
+3) Run ./bin/backend/register and ./bin/frontend/register
+4) Run ./bin/backend/deploy and ./bin/frontend/deploy
+
+After running Test #3, I get the error __"'NoneType' object is not subscriptable"__ in the Rollbar and a __500 error__ in the when I inspect.
 
 Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rollbar`
  ![Error2](./assets/week6_52_Error2.png)
  
 ![Error1](./assets/week6_52_Error1.png)
 
- `**Resolution:**` I talked to Andrew, during office hours and found that cognito_userid is different from the current_user_id. I updated the record with the correct cognito_user_id and it worked.
+__Resolution:__
+ I talked to Andrew, during office hours and found that cognito_userid is different from the current_user_id. I updated the record with the correct cognito_user_id and it worked.
 
  ![post messages to dynamodb](./assets/week6_53_Output.PNG)
 
@@ -554,13 +556,13 @@ Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rol
 
 ### Check the container insights in cloudwatch
 
-![cloudwatch container insight map view](./assets/week6_52_ContainerInsights4.PNG)
+![cloudwatch container insight map view](./assets/week6_52_ContainerInsight4.PNG)
 
 ![cloudwatch container insight list view](./assets/week6_52_ContainerInsight3.PNG)
 
-![backend task performance monitoring](./assets/week6_52_ContainerInsights5.PNG)
+![backend task performance monitoring](./assets/week6_52_ContainerInsight5.PNG)
 
-![frontend task performance monitoring](./assets/week6_52_ContainerInsights6.PNG)
+![frontend task performance monitoring](./assets/week6_52_ContainerInsight6.PNG)
 
 ### Generate environment variables into a file in the docker compose file to improve  docker networking
 using a ruby script to generate-env file and use this file in the docker compose file.
