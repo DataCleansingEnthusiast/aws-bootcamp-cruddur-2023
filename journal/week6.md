@@ -317,11 +317,12 @@ aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-j
 
 ### Create a bash script to connect-to-service of ECS cluster
 
-[Backend connect](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/backend/connect)
+[Code for Backend connect](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/backend/connect)
 
-[TestConnect](./assets/week6_31_TestingConnectingusingCLI.PNG)
+![TestConnect](./assets/week6_31_TestingConnectingusingCLI.PNG)
 
-1. Update the security group for the backend-flask for port 4567 and run health check
+Update the security group for the backend-flask for port 4567 and run health check
+
 
 ![HealthCheckafterPortChange](./assets/week6_33_HealthCheckAfterPortChange.PNG)
 
@@ -495,7 +496,7 @@ Test the frontend app using the url [https://roopish-awssolutions.com/messages/n
 
 After running Test #3, I get the error __"'NoneType' object is not subscriptable"__ in the Rollbar and a __500 error__ in the when I inspect.
 
-Here I was getting 500 error Error 'NoneType' object is not subscriptable in Rollbar`
+
  ![Error2](./assets/week6_52_Error2.png)
  
 ![Error1](./assets/week6_52_Error1.png)
