@@ -6,12 +6,14 @@ import DesktopNavigation  from '../components/DesktopNavigation';
 import DesktopSidebar     from '../components/DesktopSidebar';
 import ActivityFeed from '../components/ActivityFeed';
 import ActivityForm from '../components/ActivityForm';
+import EditProfileButton from '../components/EditProfileButton';
 
 // [TODO] Authenication
 import Cookies from 'js-cookie'
 
 export default function UserFeedPage() {
   const [activities, setActivities] = React.useState([]);
+  const [profile, setProfile] = React.useState([]);
   const [popped, setPopped] = React.useState([]);
   const [user, setUser] = React.useState(null);
   const dataFetchedRef = React.useRef(false);
@@ -27,7 +29,8 @@ export default function UserFeedPage() {
       });
       let resJson = await res.json();
       if (res.status === 200) {
-        setActivities(resJson)
+        setProfile(resJson.profile)
+        setActivities(resJson.activities)
       } else {
         console.log(res)
       }
