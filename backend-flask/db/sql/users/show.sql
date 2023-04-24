@@ -3,7 +3,8 @@ SELECT
   (SELECT
       users.uuid,
       users.handle,
-      users.display_name,  
+      users.display_name, 
+      users.bio, 
       (
       SELECT 
        count(true)

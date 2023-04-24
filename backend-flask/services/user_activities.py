@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta, timezone
 #from aws_xray_sdk.core import xray_recorder
-
 from lib.db import db
 
 class UserActivities:
@@ -14,7 +12,6 @@ class UserActivities:
       'data': None
     }
 
-    #now = datetime.now(timezone.utc).astimezone()
     
     if user_handle == None or len(user_handle) < 1:
       model['errors'] = ['blank_user_handle']
