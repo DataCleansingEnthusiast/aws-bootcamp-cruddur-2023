@@ -116,7 +116,7 @@ cors = CORS(
 
 # rollbar----
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
-@app.before_first_request
+#@app.before_first_request
 def init_rollbar():
     """init rollbar module"""
     rollbar.init(

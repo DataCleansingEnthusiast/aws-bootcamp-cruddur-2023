@@ -14,15 +14,15 @@ export default function ProfileForm(props) {
 
   const s3uploadkey = async (extension)=> {
     try {
-      const backend_url = "https://1l3iah2xe2.execute-api.us-east-1.amazonaws.com/avatars/key_upload"
-      //const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`
+      //const backend_url = "https://1l3iah2xe2.execute-api.us-east-1.amazonaws.com/avatars/key_upload"
+      const backend_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
       console.log('access_token--',access_token)
       const res = await fetch(backend_url, {
         method: "POST",
         headers: {
-          'Origin': "https://3000-datacleansi-awsbootcamp-qmsun64n3q4.ws-us95.gitpod.io/",
+          'Origin': process.env.REACT_APP_FRONTEND_URL,//"https://3000-datacleansi-awsbootcamp-qmsun64n3q4.ws-us95.gitpod.io/",
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -50,10 +50,11 @@ export default function ProfileForm(props) {
     const type = file.type;
     const preview_image_url = URL.createObjectURL(file);
     console.log(filename, size, type);
-    console.log("presignedurl-->", presignedurl);
+    
     const fileparts = filename.split('.')
     const extension = fileparts[fileparts.length-1]
     const presignedurl = await s3uploadkey(extension);
+    console.log("presignedurl-->", presignedurl);
     try {
       console.log("s3upload");
       const res = await fetch(presignedurl, {
