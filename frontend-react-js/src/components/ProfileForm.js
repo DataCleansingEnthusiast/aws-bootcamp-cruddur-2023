@@ -24,9 +24,9 @@ export default function ProfileForm(props) {
       }
       const res = await fetch(gateway_url, {
         method: "POST",
-        //body: JSON.stringify(json),
+        body: JSON.stringify(json),
         headers: {
-          'Origin': process.env.REACT_APP_FRONTEND_URL,//"https://3000-datacleansi-awsbootcamp-qmsun64n3q4.ws-us95.gitpod.io/",
+          //'Origin': process.env.REACT_APP_FRONTEND_URL,//"https://3000-datacleansi-awsbootcamp-qmsun64n3q4.ws-us95.gitpod.io/",
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
