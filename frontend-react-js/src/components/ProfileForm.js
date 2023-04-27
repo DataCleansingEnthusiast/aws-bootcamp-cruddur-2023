@@ -67,8 +67,8 @@ export default function ProfileForm(props) {
         method: "PUT",
         body: file,
         headers: {
-          "Content-Type": type,
-        },
+          "Content-Type": type
+        }
       });
       if (res.status === 200) {
         console.log("Success", res);
