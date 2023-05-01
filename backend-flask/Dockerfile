@@ -26,4 +26,4 @@ ENV PYTHONUNBUFFERED=1
 # python3 -m flask run --host=0.0.0.0 --port=4567
 # -m flag is telling to use flask module
 # we are binding to 0.0.0.0
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4568", "--debug"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567", "--debug"]

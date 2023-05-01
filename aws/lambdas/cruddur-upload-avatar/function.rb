@@ -3,15 +3,20 @@ require 'json'
 require 'jwt'
 
 def handler(event:, context:)
-    puts "event:"
-    puts event
+    
+    origin = event["headers"]["origin"]
+    puts("origin", origin)
+    myfrontentend_dev_url = "https:\/\/3000-datacleansi-awsbootcamp-(.+)\.gitpod\.io"
+    if !(/#{myfrontentend_dev_url}/.match(origin))  # if there is no match, then return the prod domain
+      origin = "api.roopish-awssolutions.com"
+    end
     # return cors headers for preflight check
   if event['routeKey'] == "OPTIONS /{proxy+}"
     puts({step: 'preflight', message: 'preflight CORS check'}.to_json)
     { 
       headers: {
         "Access-Control-Allow-Headers": "*, Authorization",
-        "Access-Control-Allow-Origin": "https://3000-datacleansi-awsbootcamp-wjihgztovei.ws-us96.gitpod.io",
+        "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Methods": "OPTIONS,GET,POST"
       },
       statusCode: 200
@@ -38,7 +43,7 @@ def handler(event:, context:)
     { 
       headers: {
         "Access-Control-Allow-Headers": "*, Authorization",
-        "Access-Control-Allow-Origin": "https://3000-datacleansi-awsbootcamp-wjihgztovei.ws-us96.gitpod.io",
+        "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Methods": "OPTIONS,GET,POST"
       },
       statusCode: 200, 
