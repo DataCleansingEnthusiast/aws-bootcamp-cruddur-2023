@@ -7,7 +7,8 @@
             "PUT"
         ],
         "AllowedOrigins": [
-            "https://*.gitpod.io"
+            "https://3000-datacleansi-awsbootcamp-*.gitpod.io",
+            "https://*.roopish-aws-solutions.com"
         ],
         "ExposeHeaders": [
             "x-amz-server-side-encryption",

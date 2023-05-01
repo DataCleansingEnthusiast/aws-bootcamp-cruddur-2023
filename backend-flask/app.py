@@ -270,8 +270,12 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 #@xray_recorder.capture('activities_home')
 def data_home():
+  
+  app.logger.debug("before calling access token-->", request.headers)
   access_token = extract_access_token(request.headers)
+  app.logger.debug("after getting access token")
   try:
+
     claims = cognito_jwt_token.verify(access_token)
     # authenicatied request
     app.logger.debug("-- app authenticated----")
