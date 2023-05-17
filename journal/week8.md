@@ -21,8 +21,12 @@ This installs cdk when gitpod opens and changes the working directory and copy f
 5. npm i @aws-sdk/client-s3
 6. Add node_modules to gitignore
 7. cdk deploy 
-8. Images are Week8_8_CDKDeploy1 to Week8_8_CDKDeploy4. To get to Week8_8_CDKDeploy4 go to Lambdas and click on newly created one.
-9. We need to run these commands to make sure sharp library works with AWS Lambda correctly ```
+8. Images are Week8_8_CDKDeploy1  to Week8_8_CDKDeploy4. ![Week8_8_CDKDeploy1](./assets/Week8_8_CDKDeploy1.PNG)
+![Week8_8_CDKDeploy2](./assets/Week8_8_CDKDeploy2.PNG)
+![Week8_8_CDKDeploy3](./assets/Week8_8_CDKDeploy3.PNG)
+![Week8_8_CDKDeploy4](./assets/Week8_8_CDKDeploy4.PNG)
+10. To get to Week8_8_CDKDeploy4 go to Lambdas and click on newly created one.
+11. We need to run these commands to make sure sharp library works with AWS Lambda correctly ```
 
 ```
 npm install
@@ -45,14 +49,16 @@ createS3NotifyToLambda(prefix: string, lambda: lambda.IFunction, bucket: s3.IBuc
       {prefix: prefix} // folder to contain the original images
 ```
 
-1. cdk synth and cdk deploy (Week8_10_S3Created)
-2. Create 2 files clear and upload under serverless
-3. export DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
+1. cdk synth and cdk deploy ![Week8_10_DeployGif](./assets/Week8_10_DeployGif.gif)
+![Week8_10_S3Created](./assets/Week8_10_S3Created.PNG)
+3. Create 2 files clear and upload under serverless
+4. export DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
 gp env DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
 4. Change to s3.EventType.OBJECT_CREATED_POST from s3.EventType.OBJECT_CREATED_PUT in thumbing-serverless-cdk-stack.ts as you won’t see any cloud watch logs from PUT. 
 5. cd thumbing-serverless-cdk-stack and then cdk destroy and then cdk deploy ..see screenshot
 6. Create a policy for s3 bucket access so we can modify it. ````const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn)```` and function code I copied from Andrew’s repo.
-7. We need to attach lambda policy to the role. lambda.addToRolePolicy(s3UploadsReadWritePolicy); and then cdk deploy. This should change permission of s3 bucket Week8_12_S3UpdateRWPolicy.PNG. Clear and upload the jpg 
-8. check logs in s3 bucket - CloudWatch. There should be no errors
-9. go to Amazon s3→buckets→[assets.roopish-awssolutions.com](https://s3.console.aws.amazon.com/s3/buckets/assets.roopish-awssolutions.com)→avatars. We should see both original and processed
-10. Make changes to index.js and thumbing and add code for . cdk deploy and clear and upload avatar. Go to Amazon SNS→Topics→cruddur-assets. 2 screenshots. Click on pending confirmation and then confirm subscription.
+7. We need to attach lambda policy to the role. lambda.addToRolePolicy(s3UploadsReadWritePolicy); and then cdk deploy. This should change permission of s3 bucket 
+![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG) Clear and upload the jpg 
+9. check logs in s3 bucket - CloudWatch. There should be no errors
+10. go to Amazon s3→buckets→[assets.roopish-awssolutions.com](https://s3.console.aws.amazon.com/s3/buckets/assets.roopish-awssolutions.com)→avatars. We should see both original and processed
+11. Make changes to index.js and thumbing and add code for . cdk deploy and clear and upload avatar. Go to Amazon SNS→Topics→cruddur-assets. 2 screenshots. Click on pending confirmation and then confirm subscription. ![Week8_11_AvatarOriginal_put2](./assets/Week8_11_AvatarOriginal_put2.PNG)![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG)
