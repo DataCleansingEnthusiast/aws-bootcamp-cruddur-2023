@@ -37,6 +37,11 @@ createBucket(bucketName: string): s3.IBucket {
     return bucket;
   }
 ```
+## Bootstrapping my Account :
+Process of provisioning resources of AWS CDK, before you can deploy CDK apps. Resources like S3 bucket for storing files, IAM roles grants Permissions needed for the deployments.
+
+cdk bootstrap "aws://ACCOUNT_ID/REGION_NAME"
+
 5. Created aws/lambdas/process-images folder and copied example.json, index.js,test.js,s3-image-processing.js
 6. cd to aws/lambdas/process-images and Type in npm init -y creates an empty init file called package.json in the folder
 7. We will install sharpjs ```npm i sharp```
@@ -73,14 +78,50 @@ createS3NotifyToLambda(prefix: string, lambda: lambda.IFunction, bucket: s3.IBuc
 
 1. cdk synth and cdk deploy ![Week8_10_DeployGif](./assets/Week8_10_DeployGif.gif)
 ![Week8_10_S3Created](./assets/Week8_10_S3Created.PNG)
-3. Create 2 files clear and upload under serverless
+3. Create bash scripts to [clear](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/7f5e53f7c8667eea047acdbe9d3a0684b440b12c/bin/avatar/clear) and [upload](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/7f5e53f7c8667eea047acdbe9d3a0684b440b12c/bin/avatar/upload)
 4. export DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
 gp env DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
 4. Change to s3.EventType.OBJECT_CREATED_POST from s3.EventType.OBJECT_CREATED_PUT in thumbing-serverless-cdk-stack.ts as you won’t see any cloud watch logs from PUT. 
-5. cd thumbing-serverless-cdk-stack and then cdk destroy and then cdk deploy ..see screenshot
+5. cd thumbing-serverless-cdk-stack and then cdk destroy and then cdk deploy 
 6. Create a policy for s3 bucket access so we can modify it. ````const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn)```` and function code I copied from Andrew’s repo.
 7. We need to attach lambda policy to the role. lambda.addToRolePolicy(s3UploadsReadWritePolicy); and then cdk deploy. This should change permission of s3 bucket 
 ![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG) Clear and upload the jpg 
 9. check logs in s3 bucket - CloudWatch. There should be no errors
 10. go to Amazon s3→buckets→[assets.roopish-awssolutions.com](https://s3.console.aws.amazon.com/s3/buckets/assets.roopish-awssolutions.com)→avatars. We should see both original and processed
 11. Make changes to index.js and thumbing and add code for . cdk deploy and clear and upload avatar. Go to Amazon SNS→Topics→cruddur-assets. 2 screenshots. Click on pending confirmation and then confirm subscription. ![Week8_11_AvatarOriginal_put2](./assets/Week8_11_AvatarOriginal_put2.PNG)![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG)
+![AvatarOriginal](./assets/Week8_11_AvatarOriginal.PNG)
+
+## Create SNS Topic
+```
+createSnsTopic(topicName: string): sns.ITopic{
+    const logicalName = "ThumbingTopic";
+    const snsTopic = new sns.Topic(this, logicalName, {
+      topicName: topicName
+    });
+    return snsTopic;
+  }
+  ```
+
+## Create an SNS Subscription
+```
+createSnsSubscription(snsTopic: sns.ITopic, webhookUrl: string): sns.Subscription {
+    const snsSubscription = snsTopic.addSubscription(
+      new subscriptions.UrlSubscription(webhookUrl)
+    )
+    return snsSubscription;
+  }
+  ```
+  ## Create S3 Event Notification to SNS
+  ```
+  createS3NotifyToSns(prefix: string, snsTopic: sns.ITopic, bucket: s3.IBucket): void {
+    const destination = new s3n.SnsDestination(snsTopic)
+    bucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED_PUT, 
+      destination,
+      {prefix: prefix}
+    );
+  }
+  ```
+  ![Week8_14_assets2](./assets/Week8_14_assets2.PNG)
+  
+  ## Setting up the cloudfront for Serving Avatars
