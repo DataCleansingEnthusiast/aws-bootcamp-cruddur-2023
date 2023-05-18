@@ -125,3 +125,38 @@ createSnsSubscription(snsTopic: sns.ITopic, webhookUrl: string): sns.Subscriptio
   ![Week8_14_assets2](./assets/Week8_14_assets2.PNG)
   
   ## Setting up the cloudfront for Serving Avatars
+  Amazon CloudFront is designed to work with S3 to serve your S3 content. Using CloudFront to serve s3 content gives you a lot more flexibility and control. To create a CloudFront distribution, a certificate in the us-east-1 zone for *.<your_domain_name> is required.
+Create domain via AWS Certificate Manager, and click "Create records in Route 53" after the certificate is issued.
+
+Create a distribution by:
+
+- set the Origin domain to point to assets.<your_domain_name>
+- choose Origin access control settings (recommended) and create a control setting
+- select Redirect HTTP to HTTPS for the viewer protocol policy
+- choose CachingOptimized, CORS-CustomOrigin as the optional Origin request policy, and SimpleCORS as the response headers policy
+- set Alternate domain name (CNAME) as assets.<your_domain_name>
+- choose the previously created ACM for the Custom SSL certificate.
+![Week8_16_RequestCert6](./assets/Week8_16_RequestCert6.PNG)
+
+create a cloudfront distribution 
+![Week8_16_RequestCert1](./assets/Week8_16_RequestCert1.PNG)
+![Week8_16_RequestCert7](./assets/Week8_16_RequestCert7.PNG)
+![Week8_17_CFDistribution](./assets/Week8_17_CFDistribution.PNG)
+
+Create a new record for the cloudfront in the Route 53 hostedzone.
+![Week8_19_CreateHostedZone1](./assets/Week8_19_CreateHostedZone1.PNG)
+![Week8_19_CreateHostedZone2](./assets/Week8_19_CreateHostedZone2.PNG)
+![Week8_19_CreateHostedZone3](./assets/Week8_19_CreateHostedZone3.PNG)
+![Week8_19_CreateHostedZone4](./assets/Week8_19_CreateHostedZone4.PNG)
+
+-Test if cloudfront is working in the browser
+![Week8_18_DomainDistribution](./assets/Week8_18_DomainDistribution.PNG)
+-Add a bucket policy to the s3 bucket (assets.roopish-awssolutions.com)
+![Week8_19_EditBucketPolicy](./assets/Week8_19_EditBucketPolicy.PNG)
+![Week8_19_UpdBucketPolicy](./assets/Week8_19_UpdBucketPolicy.PNG)
+![Week8_19_UpdBucketPolicy2](./assets/Week8_19_UpdBucketPolicy2.PNG)
+
+-test in the browser
+![Week8_19_ProcessedImage](./assets/Week8_19_ProcessedImage.PNG)
+
+First run the script (./bin/avatar/build)(https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/avatar/build) to install the sharp. Then perform cdk deploy then upload the image to the uploaded bucket then it has be copied into assets bucket. Otherwise you will get an error 
