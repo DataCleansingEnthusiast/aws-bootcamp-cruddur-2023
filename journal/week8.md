@@ -159,4 +159,4 @@ Create a new record for the cloudfront in the Route 53 hostedzone.
 -test in the browser
 ![Week8_19_ProcessedImage](./assets/Week8_19_ProcessedImage.PNG)
 
-First run the script (./bin/avatar/build)(https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/avatar/build) to install the sharp. Then perform cdk deploy then upload the image to the uploaded bucket then it has be copied into assets bucket. Otherwise you will get an error 
+First run the script [./bin/avatar/build](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/avatar/build) to install the sharp. Then perform cdk deploy then upload the image to the uploaded bucket then it has be copied into assets bucket. Otherwise you will get an error 
