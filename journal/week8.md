@@ -1,7 +1,10 @@
 # Week 8 — Serverless Image Processing
 1. Deleted the old CDK thumbing-serverless-cdk
-2. Created Environment variables and note THUMBING_BUCKET_NAME should always begin with assets. and the concatenated by your domain name.
-3. Created .env.example since .env is added to gitignore and we have to create it everytime. Made changes to gitpod.yml to include ```
+2. We will install CDK globally so we can use the AWS CDK CLI anywhere.
+
+![Installcdk](./assets/Week8_1_installcdk.PNG)
+3. Created Environment variables and note THUMBING_BUCKET_NAME should always begin with assets. and concatenated by your domain name.
+4. Created .env.example since .env is added to gitignore and we have to create it everytime. Made changes to gitpod.yml to include ```
 
 ```yaml
 - name: cdk
@@ -14,14 +17,33 @@
 
 This installs cdk when gitpod opens and changes the working directory and copy from .env.example to .env
 
-1. Made changes to thumbing-serverless-cdk-stack.ts to include environment variables.
-2. Created aws/lambdas/process-images folder and copied example.json, index.js,test.js,s3-image-processing.js
-3. cd to aws/lambdas/process-images and Type in npm init -y creates an empty init file called package.json in the folder
-4. We will install sharpjs ```npm i sharp```
-5. npm i @aws-sdk/client-s3
-6. Add node_modules to gitignore
-7. cdk deploy 
-8. Images are Week8_8_CDKDeploy1  to Week8_8_CDKDeploy4. ![Week8_8_CDKDeploy1](./assets/Week8_8_CDKDeploy1.PNG)
+1. We'll initialize a new cdk project within the folder we created:
+![Typescript](./assets/Week8_2_Typescript.PNG)
+2. Made changes to thumbing-serverless-cdk-stack.ts to include environment variables.
+3. Create S3 bucket:
+4. Add the following code to your thumbing-serverless-cdk-stack.ts
+
+```ts
+import * as s3 from 'aws-cdk-lib/aws-s3';
+
+const uploadsBucketName: string = process.env.UPLOADS_BUCKET_NAME as string;
+
+createBucket(bucketName: string): s3.IBucket {
+    const logicalName: string = 'UploadsBucket';
+    const bucket = new s3.Bucket(this, logicalName , {
+      bucketName: bucketName,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    return bucket;
+  }
+```
+5. Created aws/lambdas/process-images folder and copied example.json, index.js,test.js,s3-image-processing.js
+6. cd to aws/lambdas/process-images and Type in npm init -y creates an empty init file called package.json in the folder
+7. We will install sharpjs ```npm i sharp```
+8. npm i @aws-sdk/client-s3
+9. Add node_modules to gitignore
+10. cdk deploy 
+11. Images are Week8_8_CDKDeploy1  to Week8_8_CDKDeploy4. ![Week8_8_CDKDeploy1](./assets/Week8_8_CDKDeploy1.PNG)
 ![Week8_8_CDKDeploy2](./assets/Week8_8_CDKDeploy2.PNG)
 ![Week8_8_CDKDeploy3](./assets/Week8_8_CDKDeploy3.PNG)
 ![Week8_8_CDKDeploy4](./assets/Week8_8_CDKDeploy4.PNG)
