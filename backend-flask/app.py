@@ -104,7 +104,7 @@ cors = CORS(
   resources={r"/api/*": {"origins": origins}},
   headers=['Content-Type', 'Authorization'], 
   expose_headers="Authorization",
-  allow_headers=["content-type", "if-modified-since", "traceparent"],
+  #allow_headers=["content-type", "if-modified-since", "traceparent"],
   methods="OPTIONS,GET,HEAD,POST"
 )
 
