@@ -42,17 +42,17 @@ Process of provisioning resources of AWS CDK, before you can deploy CDK apps. Re
 
 cdk bootstrap "aws://ACCOUNT_ID/REGION_NAME"
 
-5. Created aws/lambdas/process-images folder and copied example.json, index.js,test.js,s3-image-processing.js
+5. Created aws/lambdas/process-images folder and copied example.json, index.js,test.js,s3-image-processing.js from Andrew’s repo
 6. cd to aws/lambdas/process-images and Type in npm init -y creates an empty init file called package.json in the folder
 7. We will install sharpjs ```npm i sharp```
 8. npm i @aws-sdk/client-s3
 9. Add node_modules to gitignore
-10. cdk deploy 
-11. Images are Week8_8_CDKDeploy1  to Week8_8_CDKDeploy4. ![Week8_8_CDKDeploy1](./assets/Week8_8_CDKDeploy1.PNG)
+10. Please see below 4 images for CDKDeploy. 
+![Week8_8_CDKDeploy1](./assets/Week8_8_CDKDeploy1.PNG)
 ![Week8_8_CDKDeploy2](./assets/Week8_8_CDKDeploy2.PNG)
 ![Week8_8_CDKDeploy3](./assets/Week8_8_CDKDeploy3.PNG)
 ![Week8_8_CDKDeploy4](./assets/Week8_8_CDKDeploy4.PNG)
-10. To get to Week8_8_CDKDeploy4 go to Lambdas and click on newly created one.
+
 11. We need to run these commands to make sure sharp library works with AWS Lambda correctly ```
 
 ```
@@ -61,7 +61,7 @@ rm -rf node_modules/sharp
 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp
 ```
 
-We put this in /bin/serverless/build and added few more lines of code to make it bash executable. cd to our root directory and then chmod u+x /bin/serverless/build and run the build script
+12. We put this in bin/avatar/build and added few more lines of code to make it bash executable. cd to our root directory and then chmod u+x bin/avatar/build and run the build script
 
 1. Create s3 event notification to lambda: 
 
@@ -81,14 +81,13 @@ createS3NotifyToLambda(prefix: string, lambda: lambda.IFunction, bucket: s3.IBuc
 3. Create bash scripts to [/bin/avatar/clear](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/7f5e53f7c8667eea047acdbe9d3a0684b440b12c/bin/avatar/clear) and [bin/avatar/upload](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/7f5e53f7c8667eea047acdbe9d3a0684b440b12c/bin/avatar/upload)
 4. export DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
 gp env DOMAIN_NAME=[roopish-awssolutions.com](http://roopish-awssolutions.com/)
-4. Change to s3.EventType.OBJECT_CREATED_POST from s3.EventType.OBJECT_CREATED_PUT in thumbing-serverless-cdk-stack.ts as you won’t see any cloud watch logs from PUT. 
 5. cd thumbing-serverless-cdk-stack and then cdk destroy and then cdk deploy 
 6. Create a policy for s3 bucket access so we can modify it. ````const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn)```` and function code I copied from Andrew’s repo.
 7. We need to attach lambda policy to the role. lambda.addToRolePolicy(s3UploadsReadWritePolicy); and then cdk deploy. This should change permission of s3 bucket 
 ![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG) Clear and upload the jpg 
 9. check logs in s3 bucket - CloudWatch. There should be no errors
 10. go to Amazon s3→buckets→[assets.roopish-awssolutions.com](https://s3.console.aws.amazon.com/s3/buckets/assets.roopish-awssolutions.com)→avatars. We should see both original and processed
-11. Make changes to index.js and thumbing and add code for . cdk deploy and clear and upload avatar. Go to Amazon SNS→Topics→cruddur-assets. 2 screenshots. Click on pending confirmation and then confirm subscription. 
+11. Make changes to index.js and thumbing and add code for . cdk deploy and clear and upload avatar. Go to Amazon SNS→Topics→cruddur-assets. Click on pending confirmation and then confirm subscription. 
 ![Week8_11_AvatarOriginal_put2](./assets/Week8_11_AvatarOriginal_put2.PNG)
 ![Week8_12_S3UpdateRWPolicy](./assets/Week8_12_S3UpdateRWPolicy.PNG)
 ![AvatarOriginal](./assets/Week8_11_AvatarOriginal.PNG)
@@ -189,14 +188,13 @@ Create executable scripts [bin/db/migrate](https://github.com/DataCleansingEnthu
 
 
 ![PopUp](./assets/Week8_26_TestingPopUp.PNG)
-`Create a table for schema_information'
 
 
 ### Implement Avatar Uploading 
 First, we need to create an API endpoint, which invokes a presigned URL like https://<API_ID>.execute-api.<AWS_REGION>.amazonaws.com. This presigned URL can give access to the S3 bucket (roopish-uploaded-avatars), and can deliver the uploaded image to the bucket.
 
 We will call https://<APIID>.execute-api<USRegion>.amazonaws.com/avatars/key_upload to do the upload, where the /avatars/key_upload resource is manipulated by the POST method. 
-![apigateway](./assets/Week8_26_apigateway_keyupload.PNG)
+![apigateway](./assets/Week8_26_apigateway_keyupload.png)
 
 /{proxy+} HTTP_PROXY OPTIONS route with only integration Lambda:
 
@@ -205,7 +203,7 @@ We will call https://<APIID>.execute-api<USRegion>.amazonaws.com/avatars/key_upl
 We will also create a Lambda function named CruddurAvatarUpload to decode the URL and the request. In addition, we need to implement authorization with another Lambda function named CruddurApiGatewayLambdaAuthorizer, which is important to control the data that is allowed to be transmitted from our gitpod workspace using the APIs.
 
 - create a API Gateway endpoint with Http API in AWS console (To create a this we need a lambda function. So we create one lambda function)
-  `create Lambda Function Name `cruddurAvalatUpload` Runtime ruby 2.7 and create a role for the lambda`
+   `cruddurAvalatUpload` Runtime ruby 2.7 and create a role for the lambda
 ![image](./assets/Week8_28_createlambda.PNG)
     
 ![lambda](./assets/Week8_28_createdlambdafunc.PNG)
@@ -219,7 +217,7 @@ We will also create a Lambda function named CruddurAvatarUpload to decode the UR
 ![image](./assets/Week8_29_bundleinstall.PNG)
 
 
-`Set environment variable bucketname in the gitpod`
+Set environment variable bucketname in the gitpod
 ```sh
 export UPLOADS_BUCKET_NAME="roopish-uploaded-avatars"
 gp env UPLOADS_BUCKET_NAME="roopish-uploaded-avatars"
@@ -251,26 +249,19 @@ end
 ![image](./assets/Week8_30_installThunderClient.PNG)
 
 - upload a image and test it in the thunder client select PUT instead of get
-Week8_30_ThunderClient1.PNG
+![image](./assets/Week8_30_ThunderClient1.PNG)
 ![image](./assets/Week8_30_SendImg.PNG)
 
 ![s3bucket](./assets/Week8_30_Image.PNG)
 
-### At AWS Lambda, create the corresponding two functions:
+####  Create 2 AWS lambda functions
 
-`CruddurAvalatUpload`
-
-code source as seen in [aws/lambdas/cruddur-upload-avatar/function.rb](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/lambdas/cruddur-upload-avatar/function.rb) with your own gitpod frontend URL as Access-Control-Allow-Origin
-rename Handler as function.handler
-add environment variable UPLOADS_BUCKET_NAME
-create a new policy PresignedUrlAvatarPolicy as seen in [aws/policies/s3-upload-avatar-presigned-url-policy.json](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/policies/s3-upload-avatar-presigned-url-policy.json), and then attach this policy to the role of this Lambda
-
-`CruddurApiGatewayLambdaAuthorizer`
-
-upload lambda_authorizer.zip into the code source
-add environment variables USER_POOL_ID and CLIENT_ID
-
-Copy and paste the lambda function to into the lambda function(function.rb) and add permissions and environments variables to it.
+- `CruddurAvalatUpload` code source as seen in [aws/lambdas/cruddur-upload-avatar/function.rb](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/lambdas/cruddur-upload-avatar/function.rb) with your own gitpod frontend URL as Access-Control-Allow-Origin rename Handler as function.handler
+- add environment variable UPLOADS_BUCKET_NAME
+- create a new policy PresignedUrlAvatarPolicy as seen in [aws/policies/s3-upload-avatar-presigned-url-policy.json](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/policies/s3-upload-avatar-presigned-url-policy.json), and then attach this policy to the role of this Lambda `CruddurApiGatewayLambdaAuthorizer`
+- upload lambda_authorizer.zip into the code source
+- add environment variables USER_POOL_ID and CLIENT_ID
+- Copy and paste the lambda function to into the lambda function(function.rb) and add permissions and environments variables to it.
 
 ```json
 {
@@ -383,12 +374,12 @@ and as per recommendation of Andrew in the office hours, I added ENV PYTHONUNBUF
 There are some environment variables and should be checked by printing them out. 
 
 
-- function.rb in CruddurAvatarUpload: set Access-Control-Allow-Origin as your own frontend URL.
-- index.js in CruddurApiGatewayLambdaAuthorizer: make sure that token can be correctly extracted from the authorization header.
-- Environment variables in the above two Lambdas were added.
-- erb/frontend-react-js.env.erb: REACT_APP_API_GATEWAY_ENDPOINT_URL equals to the Invoke URL shown in the API Gateway.
-- frontend-react-js/src/components/ProfileForm.js: gateway_url and backend_url are correctly set.
-- Pay attention to variable name inconsistency in some scripts, e.g., cognito_user_uuid vs. cognito_user_id.
+•	function.rb in CruddurAvatarUpload: set Access-Control-Allow-Origin as your own frontend URL.
+•	index.js in CruddurApiGatewayLambdaAuthorizer: make sure that token can be correctly extracted from the authorization header.
+•	erb/frontend-react-js.env.erb: REACT_APP_API_GATEWAY_ENDPOINT_URL is the Invoke URL shown in the API Gateway.
+•	In frontend-react-js/src/components/ProfileForm.js: check if gateway_url and backend_url are correctly set.
+•	Pay attention to variable name inconsistency in some scripts, e.g., cognito_user_uuid vs. cognito_user_id.
+
 
 
 ![triggers in lambda](./assets/Week8_37_5Trigger.PNG)
