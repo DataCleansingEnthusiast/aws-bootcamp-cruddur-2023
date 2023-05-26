@@ -136,7 +136,7 @@ def init_rollbar():
 #flask health check added week6
 @app.route('/api/health-check')
 def health_check():
-  return {'success': True}, 200
+  return {'success': True, 'ver': 1}, 200
 
 
 # rollbar--- commented week6
