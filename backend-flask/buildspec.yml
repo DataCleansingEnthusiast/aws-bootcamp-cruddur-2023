@@ -6,13 +6,13 @@ phases:
       docker: 20
     commands:
       - echo "cd into $CODEBUILD_SRC_DIR/backend-flask"
+      - echo "accountid ${AWS_ACCOUNT_ID}"
       - cd $CODEBUILD_SRC_DIR/backend-flask
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_URL
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image... 
-      - echo "accountid ${AWS_ACCOUNT_ID}"
       - docker build -t backend-flask .
       - "docker tag $REPO_NAME $IMAGE_URL/$REPO_NAME"
   post_build:
