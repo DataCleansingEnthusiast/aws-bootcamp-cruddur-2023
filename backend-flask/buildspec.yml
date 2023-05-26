@@ -6,7 +6,6 @@ phases:
       docker: 20
     commands:
       - echo "cd into $CODEBUILD_SRC_DIR/backend-flask"
-      - echo "accountid ${AWS_ACCOUNT_ID}"
       - cd $CODEBUILD_SRC_DIR/backend-flask
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_URL
   build:
@@ -26,9 +25,10 @@ phases:
 
 env:
   variables:
+    AWS_ACCOUNT_ID: 192212780887
     AWS_DEFAULT_REGION: us-east-1
     CONTAINER_NAME: backend-flask
-    IMAGE_URL: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
+    IMAGE_URL: 192212780887.dkr.ecr.us-east-1.amazonaws.com
     REPO_NAME: backend-flask:latest
 artifacts:
   files:
