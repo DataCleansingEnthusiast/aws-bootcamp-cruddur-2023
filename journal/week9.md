@@ -23,7 +23,7 @@ We create a new pipeline `cruddur-backend-fargate`. Andrew told us that there's 
 
 ![image](./assets/Week9_8.PNG)
 
-![image](./assets/Week9_8_CreateCodepipeline.GIF)
+![image](./assets/Week9_8_CreateCodepipeline.gif)
 
 ## Create new ‘prod’ Branch in GitHub
 
@@ -53,7 +53,7 @@ We added a **(bake)** stage in between **Source** and **Deploy**
 
 ## **Configuring CodeBuild:**
 
-buildspec.yml file for CodeBuild [[backend-flask/buildspec.yml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/buildspec.yml)](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/buildspec.yml)
+buildspec.yml file for CodeBuild [buildspec.yml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/buildspec.yml)
 
 - Build project configs:
 
@@ -61,11 +61,11 @@ buildspec.yml file for CodeBuild [[backend-flask/buildspec.yml](https://github.c
 
 - Source configs:
 
-![image](./assets/Week9_a2_Buildprojectconfigs.GIF)
+![image](./assets/Week9_a2_Buildprojectconfigs.gif)
 
 - Environment configs:
 
-![image](./assets/Week9_a1_Environment.GIF)
+![image](./assets/Week9_a1_Environment.gif)
 
 - Buildspecs configs:
 
@@ -81,15 +81,15 @@ I've configured the CodePipeline and integrated the CodeBuild project we have co
 
 - Source configs:
 
-![image](./assets/Week9_a2_Buildprojectconfigs.GIF)
+![image](./assets/Week9_a2_Buildprojectconfigs.gif)
 
 - Build configs:
 
-![image](./assets/Week9_a3_Buildprojectconfigs.GIF)
+![image](./assets/Week9_a3_Buildprojectconfigs.gif)
 
 - Deploy configs:
 
-![image](./assets/Week9_a4_Buildprojectconfigs.GIF)
+![image](./assets/Week9_a4_Buildprojectconfigs.gif)
 
 After deploying I got error in both build and deploy stages. Below is the error message.
 
@@ -130,7 +130,7 @@ I deleted the codebuild project and recreated and added the inline policy in IAM
 
 - Pipeline run demo:
 
-![image](./assets/Week9_a1_SuccessCodePipeline.GIF)
+![image](./assets/Week9_a1_SuccessCodePipeline.gif)
 
 - Api health check after the deployment (shows ver 1):
 
