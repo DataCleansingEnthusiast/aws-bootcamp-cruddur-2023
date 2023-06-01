@@ -80,7 +80,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az1
-      CidrBlock: !Select [0, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.0.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: true #public subnet
       VpcId: !Ref VPC
@@ -92,7 +92,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az2
-      CidrBlock: !Select [1, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.4.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: true #public subnet
       VpcId: !Ref VPC
@@ -104,7 +104,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az3
-      CidrBlock: !Select [2, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.8.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: true #public subnet
       VpcId: !Ref VPC
@@ -116,7 +116,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az1
-      CidrBlock: !Select [3, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.12.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: false #public subnet
       VpcId: !Ref VPC
@@ -128,7 +128,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az2
-      CidrBlock: !Select [4, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.16.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: false #public subnet
       VpcId: !Ref VPC
@@ -140,7 +140,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az3
-      CidrBlock: !Select [5, !Ref SubnetCidrBlocks]
+      CidrBlock: 10.0.20.0/24
       EnableDns64: false
       MapPublicIpOnLaunch: false #public subnet
       VpcId: !Ref VPC
