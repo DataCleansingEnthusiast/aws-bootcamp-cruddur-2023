@@ -25,6 +25,8 @@ Parameters:
   BuildSpec:
     Type: String
     Default: 'buildspec.yaml'
+  ArtifactBucketName:
+    Type: String
 
 Resources:
   CodeBuild:
