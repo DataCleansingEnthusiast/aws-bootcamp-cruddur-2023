@@ -54,7 +54,11 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
-          SslSupportMethod: sni-only  
+          SslSupportMethod: sni-only
+        CustomErrorResponses: 
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
   RootBucketPolicy:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
     Type: AWS::S3::BucketPolicy
