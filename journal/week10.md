@@ -292,3 +292,224 @@ Go to Ec2 Security Groups and pick ****crud-srv-sg and change inbound rule****  
 Go to bin/backend/deploy  Change the CLUSTER_NAME="CrdClusterFargateCluster” (old name”cruddur”)
 
 update bin/backend/deploy and bin/backend/create-service and execute them
+
+## Database (RDS) Layer
+
+We begin the RDS layer by creating a new folder in the `./aws/cfn` directory named `db`. We create a new `template.yaml` in this folder as well.
+
+Note: Some of the parameters a) `InstanceClass`` is set to db.t4g.micro - (It is best used in development/testing environments where consistent high CPU performance is not required.)
+
+For the MasterUserPassword property, we have set the value to `NoEcho: true``CloudFormation returns the parameter value masked as asterisks for any calls that describe the stack or stack events. This is used whether to mask the parameter value to prevent it from being displayed in the console, command line tools, or API.
+
+We created /aws/cfn/db/config.toml to set parameter values for RDS template
+
+```jsx
+[deploy]
+bucket = 'rm-cfn-artifacts'
+region = 'us-east-1'
+stack_name = 'CrdDb'
+
+[parameters]
+NetworkingStack = 'CrdNet'
+ClusterStack = 'CrdCluster'
+MasterUsername = 'crudderroot'
+
+```
+
+We also created /bin/cfn/db-deploy
+
+```jsx
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix db \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-db \
+  --parameter-overrides $PARAMETERS MasterUserPassword=$DB_PASSWORD \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+We override the parameter for `MasterUserPassword` with the value of the env var `$DB_PASSWORD` by way of the `--parameter-overrides` command. We use export and gp env commands to set the value of environment variable. We execute the change set from CFN.
+
+![image](./assets/a19_Db_Connectivity.PNG)
+
+![image](./assets/a19_Db_created.PNG)
+
+Our database ‘cruddur-cfninstance’ has been created.
+
+![image](./assets/a19_Db_Resource.PNG)
+
+We select `cruddur-cfninstance`` resource CFN which redirects to RDS.
+
+![image](./assets/a19_Db_list.PNG)
+
+We see that both our original database `cruddur-db-instance` and newly created database  `cruddur-cfninstance`
+
+This new database has no data yet. CONNECTION_URL is set using AWS System Manager.
+
+![image](./assets/a19_SystemManager.PNG)
+
+### Health Check - Service Layer - Part 2
+
+Health check for Load balancer was failing and in the office hours Andrew looked at my code and I had the port number 80 instead of 4567. 
+
+![image](./assets/a19_OfficeHours_80to4567.PNG)
+
+![image](./assets/a19_Healthy.PNG)
+
+We test our endpoint by navigating to api.roopish-awssolutions.com/api/health-check but the page does not resolve. This is because our new load balancer is not being pointed to in Route53 in AWS. We navigate over to Route53 in AWS and update the A records for api.roopish-awssolutions.com and select our new ALB.
+
+![image](./assets/a19_UpdateHostedZoneDualStack.PNG)
+
+Testing our backend service from a web browser by manually going to the endpoint.
+
+![image](./assets/a20_HealthCheckPassed.PNG)
+
+## **DynamoDB Layer (SAM)**
+
+The AWS Serverless Application Model (AWS SAM) is an open-source framework designed to streamline the building and deployment of serverless applications on AWS. By simplifying the process of creating and managing resources, it significantly reduces the complexity usually associated with traditional architectures. They are an extension of CFN templates. SAM templates can be written in YAML or JSON.
+
+We created /aws/cfn/ddb/template.yaml, and /aws/cfn/ddb/samconfig.toml (note the change in name). We also created /bin/cfn/ddb-deploy.
+
+We implement SAM into our DDB layer. We need to install it into our workspace, so we open our `.gitpod.yml` file and add it:
+
+```jsx
+tasks:
+  - name: aws-sam
+    init: |
+      cd /workspace
+      wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+      unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+      sudo ./sam-installation/install
+      cd $THEIA_WORKSPACE_ROOT
+
+```
+
+Instead of restarting the workspace, we run the commands line by line
+
+![image](./assets/a21_getsam.PNG)
+
+These are the errors I encountered when building the ddb layer.
+
+While referencing our existing `cruddur-messaging-stream` Lambda, we noticed the Runtime was set to Python3.9 instead of 3.8. Since this is changing, we decided to add a parameter for that property instead and reference it.
+
+![image](./assets/a22_build_err2.PNG)
+
+```
+Parameters:
+  PythonRuntime:
+    Type: String
+    Default: python3.9
+```
+
+After this I ran ddb-deploy again and got another error
+
+ ![image](./assets/a22_build1.PNG)
+
+This error indicates we may want to run this in a container. That way we can install dependencies required for our Lambda function. For this, we add the `--use-container` option to our `ddb-deploy` script for the `sam build` command.
+
+We run `ddb-deploy` again.
+
+We update `template.yaml` to remove `Architectures` property so it defaults to `x86` instead of `arm64`
+
+ddb/build , ddb/package and ddb/deploy scripts are written and executed. 
+
+![image](./assets/a23_buildsuccededFinally.PNG)
+
+![image](./assets/a23_CFN_Crdddb.PNG)
+
+![image](./assets/a23_DeploysuccededFinally.PNG)
+
+![image](./assets/a23_Deployed.PNG)
+
+![image](./assets/a23_PackagesuccededFinally.PNG)
+
+![image](./assets/a23_DynamoDbTable.PNG)
+
+DDB layer in a good state for now
+
+## CICD Layer
+
+We create /bin/cfn/cicd-deploy and /aws/cfn/cicd/template.yaml and /aws/cfn/cicd/config.toml
+
+Its decided that we'd like to use a nested stack to implement the CICD layer.
+
+Here’s some documentation that I found very useful
+
+https://catalog.workshops.aws/cfn101/en-US/intermediate/templates/nested-stacks
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html
+
+codebuild.yaml is created in aws/cfn/nested directory.
+
+To test, we make our `cicd-deploy` script exectuable, then run it.
+
+Also created S3 bucket manually to store the artifacts. 
+
+![image](./assets/a24_s3bucket.PNG)
+
+Created an empty folder in my root directory `tmp` which will be used when we compile a package template and all that generated files (from output-template-file i.e. The path to the file where the command writes the output AWS CloudFormation template. In our project it is packaged-template.yaml) will be stored in this `tmp` folder. In the `.gitignore`added tmp/*. 
+
+![image](./assets/a25_CICDDeploy.PNG)
+
+![image](./assets/a25_CICDCFN1.PNG)
+
+![image](./assets/a25_CICDCFN_Parameters.PNG)
+
+![image](./assets/a25_CICDCFN_Events.PNG)
+
+![image](./assets/a25_CICDCodepipelinefail.PNG)
+
+![image](./assets/a25_CICDCodepipeline_Upd.PNG)
+
+![image](./assets/a25_CICDCodepipelineOK.GIF)
+
+![image](./assets/a25_CICDNestedDone.PNG)
+
+## Frontend Stack (Static Web Hosting)
+
+We create [/aws/cfn/frontend/template.yaml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/3598db3c15aa88be4f7fc7eacf49a573b586aa6b/aws/cfn/frontend/template.yaml) and [/aws/cfn/frontend/config.toml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/3598db3c15aa88be4f7fc7eacf49a573b586aa6b/aws/cfn/frontend/config.toml)
+
+Referring to template.yaml there are 2 buckets `WWWBucket` and `RootBucket`. The `WWWBucket` is configured to redirect all requests to the `RootBucket`. The `RootBucket` has public access enabled and is configured as a website with an index document and an error document.
+
+We added bucket policy in template.yaml which adds permissions to root bucket.
+
+We renamed scripts in /bin/cfn folder and removed ‘-deploy’
+
+We also wrote [/bin/cfn/frontend](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/3598db3c15aa88be4f7fc7eacf49a573b586aa6b/bin/frontend/deploy)
+
+Before we execute this script, we have to remove ‘A’ record from our root domain as our template.yaml will also generate a A record.
+
+I got an error because I had not deleted it.
+
+![image](./assets/a25_CICDFrontend1.PNG)
+
+![image](./assets/a25_CICDDeleteTypeA.PNG)
+
+![image](./assets/a25_CICDErrorFrontEnd.PNG)
+
+![image](./assets/a25_CICDDeleteTypeA2.PNG)
+
+After deleting the ‘A’ record deployed frontend again.
+
+![image](./assets/a25_CICDFrontendCreateAgain.PNG)
+
+![image](./assets/a25_CICDFrontendCreated.PNG)
+
+![image](./assets/a25_CICDFrontendResources.PNG)
