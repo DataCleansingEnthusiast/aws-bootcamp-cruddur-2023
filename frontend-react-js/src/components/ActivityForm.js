@@ -2,6 +2,7 @@ import './ActivityForm.css';
 import React from "react";
 import process from 'process';
 import {ReactComponent as BombIcon} from './svg/bomb.svg';
+import {getAccessToken} from '../lib/CheckAuth';
 
 export default function ActivityForm(props) {
   const [count, setCount] = React.useState(0);
@@ -21,7 +22,7 @@ export default function ActivityForm(props) {
       console.log('onsubmit payload in ActivityForm', message)
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
-      
+
       const res = await fetch(backend_url, {
         method: "POST",
         headers: {
