@@ -4,3 +4,6 @@ frontend-react-js/build/*
 *.env
 node_modules
 package-lock.json
+.aws-sam
+build.toml
+tmp/*

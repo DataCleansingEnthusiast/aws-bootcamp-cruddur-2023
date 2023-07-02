@@ -6,7 +6,7 @@
     "enableExecuteCommand": true,
     "loadBalancers": [
       {
-          "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:192212780887:targetgroup/cruddur-backend-flask-tg/ad575b0980879d59",
+          "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:192212780887:targetgroup/CrdClu-Backe-C6ZGNEANDSLR/547a7a18153ee0d7",
           "containerName": "backend-flask",
           "containerPort": 4567
       }
@@ -18,12 +18,10 @@
           "sg-0877479f69d0ee7d4"
         ],
         "subnets": [
-            "subnet-00d8b1de92a3f8787"
-            ,"subnet-0f0d0a2681a2e1420"
-            ,"subnet-0865fc431616cf823"
-            ,"subnet-091199e7cd6230f8e"
-            ,"subnet-0402753bcd6e74b27"
-            ,"subnet-0898d5e9178ba2821"
+          "subnet-0320da7f47ae2549b",
+          "subnet-00c8d5e0a487da0d7",
+          "subnet-0471b9253ba8bf0a4"
+            
         ]
       }
     },

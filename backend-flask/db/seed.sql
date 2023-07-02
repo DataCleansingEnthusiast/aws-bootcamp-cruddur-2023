@@ -1,7 +1,8 @@
 -- this file was manually created
 INSERT INTO public.users (display_name, handle, email, cognito_user_id)
 VALUES
-  ('roopish', 'roopish' ,'rm@gmail.com','26b882d5-8c11-4bea-a7e9-bb0a1ef65742'),
+  ('roopish', 'roopish' ,'roopish3554@gmail.com','26b882d5-8c11-4bea-a7e9-bb0a1ef65742'),
+  ('roopish1', 'roopish1' ,'roopish98@gmail.com','26b882d5-8c11-4bea-a7e9-bb0a1ef65742'),
   ('Andrew Brown', 'andrewbrown' ,'a@br.com', 'MOCK'),
   ('Andrew Bayko', 'bayko' ,'a@ba.com','MOCK'),
   ('Londo Mollari','londo' ,'lmollari@centari.com' ,'MOCK');
