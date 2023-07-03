@@ -1,8 +1,10 @@
-from flask import Flask
+from flask import Flask,g
 from flask import request
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
+
 import os
 import sys
+from flask import current_app as app
 
 from services.home_activities import *
 from services.notifications_activities import *
@@ -16,117 +18,24 @@ from services.create_message import *
 from services.show_activity import *
 from services.users_short import *
 from services.update_profile import *
+from lib.model import model_json
 
-
-#import token verifier
-#from lib.cognito_jwt_token import TokenVerifyError, CognitoJwtToken
 from lib.cognito_jwt_token import jwt_required
+from lib.rollbar import init_rollbar
+from lib.xray import init_xray
+from lib.honeycomb import init_honeycomb
+from lib.cors import init_cors
 
-# cloudwatch
-import watchtower
-import logging
 from time import strftime
 
-# Configuring Logger to Use CloudWatch - after testing commenting - spend consideration
-# LOGGER = logging.getLogger(__name__)
-# LOGGER.setLevel(logging.DEBUG)
-# console_handler = logging.StreamHandler()
-# cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
-# LOGGER.addHandler(console_handler)
-# LOGGER.addHandler(cw_handler)
-# LOGGER.info("Start log for Cruddur");
-
-# X-RAY2---
-from aws_xray_sdk.core import xray_recorder
-from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
-
-# rollbar --
-import os
-import rollbar
-import rollbar.contrib.flask
-from flask import got_request_exception
-
-# Honeycomb---
-# app.py updates Honeycomb
-# OTLPSpanExporter - reads env variables for the configuration of where to send the spans
-from opentelemetry import trace
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
-
-# Honeycomb---
-# Initialize tracing and an exporter that can send data to Honeycomb
-provider = TracerProvider()
-processor = BatchSpanProcessor(OTLPSpanExporter())
-provider.add_span_processor(processor)
-
-
-# turned off xray
-# X-RAY2----to start the recorder
-# AWS_XRAY_URL - endpoint where to send the data
-xray_url = os.getenv("AWS_XRAY_URL")
-xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
-
-# OTEL
-# Show this in the logs within the backend-flask app (STDOUT)
-# simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
-# provider.add_span_processor(simple_processor)
-
-trace.set_tracer_provider(provider)
-tracer = trace.get_tracer(__name__)
-
-
 app = Flask(__name__)
+#---Initialization
+init_rollbar(app)
+init_xray(app)
+init_rollbar(app)
+init_cors(app)
 
-
-# X-RAY2----
-#XRayMiddleware(app, xray_recorder)
-# Honeycomb---
-# Initialize automatic instrumentation with Flask
-FlaskInstrumentor().instrument_app(app)
-RequestsInstrumentor().instrument()
-
-frontend = os.getenv('FRONTEND_URL')
-backend = os.getenv('BACKEND_URL')
-origins = [frontend, backend]
-
-cors = CORS(
-  app, 
-  resources={r"/api/*": {"origins": origins}},
-  headers=['Content-Type', 'Authorization'], 
-  expose_headers="Authorization",
-  #allow_headers=["content-type", "if-modified-since", "traceparent"],
-  methods="OPTIONS,GET,HEAD,POST"
-)
-
-# Cloudwatch logs
-# @app.after_request
-# def after_request(response):
-#     timestamp = strftime('[%Y-%b-%d %H:%M]')
-#     LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
-#     return response
-
-# rollbar----
-rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
-#@app.before_first_request
-with app.app_context():
-  def init_rollbar():
-      """init rollbar module"""
-      rollbar.init(
-          # access token
-          rollbar_access_token,
-          # environment name
-          'production',
-          # server root directory, makes tracebacks prettier
-          root=os.path.dirname(os.path.realpath(__file__)),
-          # flask already sets up logging
-          allow_logging_basic_config=False)
-
-      # send exceptions from `app` to rollbar, using flask's signal system.
-      got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+#init_cloudwatch(response)
 
 #flask health check added week6
 @app.route('/api/health-check')
@@ -149,18 +58,12 @@ def health_check():
 #   else:
 #     return model['data'], 200
 
+    
 @app.route("/api/message_groups", methods=['GET'])
 @jwt_required()
 def data_message_groups():
     model = MessageGroups.run(cognito_user_id=g.cognito_user_id)
-    if model['errors'] is not None:
-      return model['errors'], 422
-    else:
-      return model['data'], 200
-  except TokenVerifyError as e:
-    # unauthenicatied request
-    app.logger.debug(e)
-    return {}, 401
+    return model_json(model)
 
 
 @app.route("/api/messages/<string:message_group_uuid>", methods=['GET'])
@@ -170,18 +73,13 @@ def data_messages(message_group_uuid):
         cognito_user_id=cognito_user_id,
         message_group_uuid=message_group_uuid
       )
-      
-    if model['errors'] is not None:
-      return model['errors'], 422
-    else:
-      return model['data'], 200
+    return model_json(model)
 
 
 @app.route("/api/messages", methods=['POST','OPTIONS'])
 @jwt_required()
 @cross_origin()
 def data_create_message():
-   
   app.logger.debug('in app.py data_create_message:-----')
   app.logger.debug(cognito_user_id)
   if message_group_uuid == None:
@@ -200,10 +98,7 @@ def data_create_message():
       message_group_uuid=message_group_uuid,
       cognito_user_id=g.cognito_user_id
     )
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
+  return model_json(model)
 
 
 def default_home_feed(e):
@@ -229,36 +124,25 @@ def data_notifications():
 @app.route("/api/activities/@<string:handle>", methods=['GET'])
 #@xray_recorder.capture('activities_users')
 def data_handle(handle):
-  model = UserActivities.run(handle)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
+  model =  UserActivities.run(handle)
+  return model_json(model)
 
 @app.route("/api/activities/search", methods=['GET'])
 def data_search():
   term = request.args.get('term')
   model = SearchActivities.run(term)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
-  return
+  return model_json(model)
 
 @app.route("/api/activities", methods=['POST','OPTIONS'])
 @cross_origin()
 @jwt_required()
 def data_activities():
-  
   message = request.json['message']
   print('here')
   ttl = request.json['ttl']
   model = CreateActivity.run(message, user_handle, ttl)
   model = CreateActivity.run(message, g.cognito_user_id, ttl)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
+  return model_json(model)
 
 
 @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
@@ -273,11 +157,7 @@ def data_activities_reply(activity_uuid):
   user_handle  = 'roopish'#'andrewbrown'
   message = request.json['message']
   model = CreateReply.run(message, user_handle, activity_uuid)
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
-  return
+  return model_json(model)
 
 @app.route("/api/users/@<string:handle>/short", methods=['GET'])
 def data_users_short(handle):
@@ -291,16 +171,12 @@ def data_update_profile():
   bio          = request.json.get('bio',None)
   display_name = request.json.get('display_name',None)
   access_token = extract_access_token(request.headers)
-  
   model = UpdateProfile.run(
     cognito_user_id=g.cognito_user_id,
     bio=bio,
     display_name=display_name
   )
-  if model['errors'] is not None:
-    return model['errors'], 422
-  else:
-    return model['data'], 200
+  return model_json(model)
 
 
 if __name__ == "__main__":
