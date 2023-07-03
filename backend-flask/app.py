@@ -3,7 +3,7 @@ import sys
 
 from flask import Flask,g
 from flask import request
-from flask_cors import cross_origin
+
 
 from lib.helpers import model_json
 from lib.cognito_jwt_token import jwt_required
@@ -11,7 +11,7 @@ from lib.rollbar import init_rollbar
 from lib.xray import init_xray
 from lib.honeycomb import init_honeycomb
 from lib.cors import init_cors
-from time import strftime
+
 
 import routes.activities
 import routes.users

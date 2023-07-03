@@ -14,5 +14,10 @@ VALUES
     (SELECT uuid from public.users WHERE users.handle = 'roopish' LIMIT 1),
     'This was imported as seed data!',
     current_timestamp + interval '10 day'
-  )
+  ),
+  (
+    (SELECT uuid from public.users WHERE users.handle = 'roopish1' LIMIT 1),
+    'I am the other user!',    
+    current_timestamp + interval '1 day'
+  );
 \echo 'inserted into activities table'
