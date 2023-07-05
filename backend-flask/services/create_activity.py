@@ -8,7 +8,8 @@ class CreateActivity:
       'errors': None,
       'data': None
     }
-
+    print('in CreateActivity.py run')
+    print(cognito_user_id)
     now = datetime.now(timezone.utc).astimezone()
 
     if (ttl == '30-days'):
@@ -52,7 +53,7 @@ class CreateActivity:
   def create_activity(cognito_user_id, message, expires_at):
     sql = db.template('activities','create')
     uuid = db.query_commit(sql,{
-      'handle': cognito_user_id,
+      'cognito_user_id': cognito_user_id,
       'message': message,
       'expires_at': expires_at
     })
