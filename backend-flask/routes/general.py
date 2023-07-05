@@ -7,7 +7,7 @@ def load(app):
         return {'success': True, 'ver': 1}, 200
 
 # rollbar--- commented week6
-#@app.route('/rollbar/test')
-#def rollbar_test():
-#    g.rollbar.report_message('Hello World!', 'warning')
-#    return "Hello World!"
+    @app.route('/rollbar/test')
+    def rollbar_test():
+        g.rollbar.report_message('Hello World!', 'warning')
+        return "Hello World!"

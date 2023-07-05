@@ -1,8 +1,7 @@
 INSERT INTO public.activities (
   user_uuid,
   message,
-  reply_to_activity_uuid,
-  expires_at
+  reply_to_activity_uuid
 )
 VALUES (
   (SELECT uuid 
@@ -11,6 +10,6 @@ VALUES (
     LIMIT 1
   ),
   %(message)s,
-  %(reply_to_activity_uuid)s,
-  (SELECT expires_at FROM public.activities WHERE uuid = %(reply_to_activity_uuid)s)
+  %(reply_to_activity_uuid)s
+  
 ) RETURNING uuid;
