@@ -10,7 +10,7 @@ from flask_cors import cross_origin
 from services.users_short import UsersShort
 from services.update_profile import UpdateProfile
 from services.user_activities import UserActivities
-
+from services.show_activity import ShowActivity
 
 ## helpers
 from lib.helpers import model_json
@@ -22,12 +22,6 @@ def load(app):
     model = UserActivities.run(handle)
     return model_json(model)
 
-  @app.route("/api/activities/@<string:handle>", methods=['GET'])
-  #@xray_recorder.capture('activities_users')
-  def data_handle(handle):
-    model =  UserActivities.run(handle)
-    return model_json(model)
-  
   @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
   #@xray_recorder.capture('activities_show')
   def data_show_activity(activity_uuid):
@@ -39,7 +33,7 @@ def load(app):
     data = UsersShort.run(handle)
     return data, 200
 
-  @app.route("/api/profile/update", methods=['POST','OPTIONS'])
+  @app.route("/api/profile/update", methods=['POST','OPTIONS']) #maybe pUT
   @cross_origin()
   @jwt_required()
   def data_update_profile():
