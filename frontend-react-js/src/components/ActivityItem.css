@@ -3,7 +3,6 @@
   flex-direction: column;
   border-bottom: solid 1px rgb(60,54,79);
   overflow: hidden;
-  padding: 16px;
 }
 
 .activity_item.clickable:hover {
