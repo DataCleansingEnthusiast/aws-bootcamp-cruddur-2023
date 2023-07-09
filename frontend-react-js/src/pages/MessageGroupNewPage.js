@@ -7,7 +7,8 @@ import MessageGroupFeed from 'components/MessageGroupFeed';
 import MessagesFeed from 'components/MessageFeed';
 import MessagesForm from 'components/MessageForm';
 
-import {checkAuth} from '../lib/CheckAuth';
+import {get} from 'lib/Requests';
+import {checkAuth} from 'lib/CheckAuth';
 
 export default function MessageGroupPage() {
   const [otherUser, setOtherUser] = React.useState([]);

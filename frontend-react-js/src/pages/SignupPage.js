@@ -13,7 +13,7 @@ export default function SignupPage() {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [errors, setErrors] = React.useState('');
+  const [errors, setErrors] = React.useState('[]');
 
   const onsubmit = async (event) => {
     event.preventDefault();
@@ -53,10 +53,7 @@ export default function SignupPage() {
     setPassword(event.target.value);
   }
 
-  let el_errors;
-  if (errors){
-    el_errors = <div className='errors'>{errors}</div>;
-  }
+  
 
   return (
     <article className='signup-article'>
@@ -106,7 +103,7 @@ export default function SignupPage() {
               />
             </div>
           </div>
-          {el_errors}
+          <FormErrors errors={errors} />
           <div className='submit'>
             <button type='submit'>Sign Up</button>
           </div>
