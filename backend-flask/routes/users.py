@@ -22,10 +22,9 @@ def load(app):
     model = UserActivities.run(handle)
     return model_json(model)
 
-  @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
-  #@xray_recorder.capture('activities_show')
-  def data_show_activity(activity_uuid):
-    data = ShowActivities.run(activity_uuid=activity_uuid)
+  @app.route("/api/activities/@<string:handle>/status/<string:activity_uuid>", methods=['GET'])
+  def data_show_activity(handle, activity_uuid):
+    data = ShowActivity.run(activity_uuid)
     return data, 200
 
   @app.route("/api/users/@<string:handle>/short", methods=['GET'])
@@ -39,7 +38,7 @@ def load(app):
   def data_update_profile():
     bio          = request.json.get('bio',None)
     display_name = request.json.get('display_name',None)
-    access_token = extract_access_token(request.headers)
+    #access_token = extract_access_token(request.headers)
     model = UpdateProfile.run(
         cognito_user_id=g.cognito_user_id,
         bio=bio,

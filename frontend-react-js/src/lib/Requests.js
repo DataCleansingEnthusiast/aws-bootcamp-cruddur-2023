@@ -1,6 +1,7 @@
 import {getAccessToken} from 'lib/CheckAuth';
 
 async function request(method,url,payload_data,options){
+  
   if (options.hasOwnProperty('setErrors')){
     options.setErrors('')
   }
@@ -34,10 +35,10 @@ async function request(method,url,payload_data,options){
       }
       console.log(res,data)
     }
-    return res; // Return the response
+   // return res; // Return the response
 
   } catch (err) {
-    console.log('request catch',err)
+    
     if (err instanceof Response) {
         console.log('HTTP error detected:', err.status); // Here you can see the status.
         if (options.hasOwnProperty('setErrors')){
@@ -52,17 +53,20 @@ async function request(method,url,payload_data,options){
 }
 
 export function post(url,payload_data,options){
-  return request('POST',url,payload_data,options)
+  console.log('In request.js POST')
+  request('POST',url,payload_data,options)
 }
 
 export function put(url,payload_data,options){
-  return request('PUT',url,payload_data,options)
+  console.log('In request.js PUT')
+  request('PUT',url,payload_data,options)
 }
 
 export function get(url,options){
-  return request('GET',url,null,options)
+  console.log('In request.js GET::',options)
+  request('GET',url,null,options)
 }
 
 export function destroy(url,payload_data,options){
-  return request('DELETE',url,payload_data,options)
+  request('DELETE',url,payload_data,options)
 }
