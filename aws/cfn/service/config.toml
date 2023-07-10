@@ -6,3 +6,4 @@ stack_name = 'CrdSrvBackendFlask'
 [parameters]
 EnvFrontendUrl = 'https://roopish-awssolutions.com'
 EnvBackendUrl = 'https://api.roopish-awssolutions.com'
+DDBMessageTable = 'CrdDdb-DynamoDBTable-12ZX6Z3TOW6KN'
