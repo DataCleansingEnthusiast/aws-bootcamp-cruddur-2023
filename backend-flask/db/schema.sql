@@ -24,7 +24,7 @@ CREATE TABLE public.users (
 \echo '-----Created users table------'
 CREATE TABLE public.activities (
   uuid UUID default uuid_generate_v4() primary key,
-  user_uuid UUID REFERENCES public.users(uuid) NOT NULL,
+  user_uuid UUID NOT NULL,
   message text NOT NULL,
   replies_count integer default 0,
   reposts_count integer default 0,
