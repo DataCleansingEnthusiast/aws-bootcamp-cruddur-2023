@@ -19,7 +19,8 @@ export default function ProfileForm(props) {
   const s3uploadkey = async (extension)=> {
     try {
       console.log("------ProfileForm s3uploadkey-----------")
-      const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`;
+      //const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`;
+      const gateway_url = `https://1l3iah2xe2.execute-api.us-east-1.amazonaws.com/avatars/key_upload`
       await getAccessToken();
       const access_token = localStorage.getItem("access_token");
       console.log('access_token--',access_token)
