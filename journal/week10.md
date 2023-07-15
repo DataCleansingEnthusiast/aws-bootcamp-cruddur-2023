@@ -513,3 +513,6 @@ After deleting the ‘A’ record deployed frontend again.
 ![image](./assets/a25_CICDFrontendCreated.PNG)
 
 ![image](./assets/a25_CICDFrontendResources.PNG)
+
+## CFN Architecture diagram using draw.io:
+![image](./assets/CFN_Diagram.drawio.svg)
