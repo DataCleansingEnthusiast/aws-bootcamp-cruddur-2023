@@ -197,13 +197,13 @@ services:
       dockerfile: Dockerfile.prod
 ```
 
-Made changes to ![app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) and added `with app.app_context():`
+Made changes to [app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) and added `with app.app_context():`
 
 Docker compose Up.
 
 When we open the backend port in browser we see “The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.” To resolve this, I first ran /bin/db/connect
 
-![image](assets/WeekX_9_Connect.PNG))
+![image](assets/WeekX_9_Connect.PNG)
 
 Let’s run /bin/backend/build and then /bin/backend/push
 
@@ -221,11 +221,11 @@ Click on Security group for the RDS ‘cruddur-cfninstance’ and edit inbound r
 
 In gitpod we try to update this Security group rule id
 
-![image](assets/WeekX_10_SecGrp.PNG))
+![image](assets/WeekX_10_SecGrp.PNG)
 
 Get the Security groupID from 
 
-![image](assets/WeekX_10_SecGrp2.PNG))
+![image](assets/WeekX_10_SecGrp2.PNG)
 
 ```bash
 export DB_SG_RULE_ID="sgr-02b24424aa4f36a0b"
@@ -238,7 +238,7 @@ export GITPOD_IP=$(curl [ifconfig.me](http://ifconfig.me/))
 
 Run the above commands and then 
 
-![image](assets/WeekX_11_Updatesg.PNG))
+![image](assets/WeekX_11_Updatesg.PNG)
 
 In AWS console, you should see the updated IP address
 
@@ -256,4 +256,4 @@ We login to cruddurcfn and check the columns of table ‘users’ and see that b
 
 Login to  database to check the columns of users table
 
-![image](assets/WeekX_12_Column_bio_prod.PNG))
+![image](assets/WeekX_12_Column_bio_prod.PNG)
