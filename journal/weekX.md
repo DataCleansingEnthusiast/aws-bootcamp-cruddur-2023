@@ -203,7 +203,7 @@ Docker compose Up.
 
 When we open the backend port in browser we see “The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.” To resolve this, I first ran /bin/db/connect
 
-![image](assets/WeekX_9_Connect.PNG)
+![image](assets/WeekX_9_Connect.png)
 
 Let’s run /bin/backend/build and then /bin/backend/push
 
@@ -221,11 +221,11 @@ Click on Security group for the RDS ‘cruddur-cfninstance’ and edit inbound r
 
 In gitpod we try to update this Security group rule id
 
-![image](assets/WeekX_10_SecGrp.PNG)
+![image](assets/WeekX_10_SecGrp.png)
 
 Get the Security groupID from 
 
-![image](assets/WeekX_10_SecGrp2.PNG)
+![image](assets/WeekX_10_SecGrp2.png)
 
 ```bash
 export DB_SG_RULE_ID="sgr-02b24424aa4f36a0b"
@@ -238,7 +238,7 @@ export GITPOD_IP=$(curl [ifconfig.me](http://ifconfig.me/))
 
 Run the above commands and then 
 
-![image](assets/WeekX_11_Updatesg.PNG)
+![image](assets/WeekX_11_Updatesg.png)
 
 In AWS console, you should see the updated IP address
 
