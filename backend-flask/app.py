@@ -21,6 +21,7 @@ import routes.general
 app = Flask(__name__)
 #---Initialization
 init_rollbar(app)
+init_honeycomb(app)
 init_xray(app)
 init_cors(app)
 with app.app_context():

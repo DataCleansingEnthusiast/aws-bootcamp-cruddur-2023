@@ -3,7 +3,7 @@ import React from "react";
 import process from 'process';
 import {getAccessToken} from 'lib/CheckAuth';
 
-import {post} from 'lib/Requests';
+import {post,put} from 'lib/Requests';
 import FormErrors from 'components/FormErrors';
 
 export default function ProfileForm(props) {
@@ -37,7 +37,7 @@ export default function ProfileForm(props) {
           'Content-Type': 'application/json'
         }
       });
-      console.log('here--')
+      
       let data = await res.json();
 
       if (res.status === 200) {
@@ -91,7 +91,7 @@ export default function ProfileForm(props) {
       bio: bio,
       display_name: displayName
     }
-    post(url,payload_data,{
+    put(url,payload_data,{
       auth: true,
       setErrors: setErrors,
       success: function(data){

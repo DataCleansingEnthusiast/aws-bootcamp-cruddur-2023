@@ -10,8 +10,27 @@ const jwtVerifier = CognitoJwtVerifier.create({
   //  assertStringEquals("e-mail", payload["email"], process.env.USER_EMAIL);
   //},
 });
-
 exports.handler = async (event) => {
+  console.log("request:", JSON.stringify(event, undefined, 2));
+
+  const jwt = event.headers.authorization;
+  var token = jwt.substring(7, jwt.length);
+  
+  console.log("HEADER", token);
+  try {
+    const payload = await jwtVerifier.verify(token);
+    console.log("Access allowed. JWT payload:", payload);
+  } catch (err) {
+    console.error("Access forbidden:", err);
+    return {
+      isAuthorized: false,
+    };
+  }
+  return {
+    isAuthorized: true,
+  };
+};
+/*exports.handler = async (event) => {
   console.log("request:", JSON.stringify(event, undefined, 2));
 
   //const jwt = event.headers.authorization;
@@ -30,4 +49,4 @@ exports.handler = async (event) => {
       console.log("response", response);
       return response;
     }
-};
+};*/
