@@ -63,7 +63,7 @@ export function put(url,payload_data,options){
 }
 
 export function get(url,options){
-  console.log('In request.js GET::',options)
+  //console.log('In request.js GET::',options)
   request('GET',url,null,options)
 }
 

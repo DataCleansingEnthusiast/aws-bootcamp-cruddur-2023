@@ -3,12 +3,13 @@ import React from "react";
 import process from 'process';
 import {getAccessToken} from 'lib/CheckAuth';
 
-import {post} from 'lib/Requests';
+import {post,put} from 'lib/Requests';
 import FormErrors from 'components/FormErrors';
 
 export default function ProfileForm(props) {
   const [bio, setBio] = React.useState('');
   const [displayName, setDisplayName] = React.useState('');
+  const [errors, setErrors] = React.useState('');
 
   React.useEffect(()=>{
     setBio(props.profile.bio || '');
@@ -18,7 +19,8 @@ export default function ProfileForm(props) {
   const s3uploadkey = async (extension)=> {
     try {
       console.log("------ProfileForm s3uploadkey-----------")
-      const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`;
+      //const gateway_url = `${process.env.REACT_APP_API_GATEWAY_ENDPOINT_URL}/avatars/key_upload`;
+      const gateway_url = `https://1l3iah2xe2.execute-api.us-east-1.amazonaws.com/avatars/key_upload`
       await getAccessToken();
       const access_token = localStorage.getItem("access_token");
       console.log('access_token--',access_token)
@@ -35,7 +37,7 @@ export default function ProfileForm(props) {
           'Content-Type': 'application/json'
         }
       });
-      console.log('here--')
+      
       let data = await res.json();
 
       if (res.status === 200) {
@@ -89,7 +91,7 @@ export default function ProfileForm(props) {
       bio: bio,
       display_name: displayName
     }
-    post(url,payload_data,{
+    put(url,payload_data,{
       auth: true,
       setErrors: setErrors,
       success: function(data){

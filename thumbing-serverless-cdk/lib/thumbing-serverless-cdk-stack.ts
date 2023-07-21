@@ -63,13 +63,21 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
   } //constructor
 
   createBucket(bucketName: string): s3.IBucket {
+    const bucket = new s3.Bucket(this, 'UploadsBucket', {
+      bucketName: bucketName,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
+    return bucket;
+  }
+
+  /*createBucket(bucketName: string): s3.IBucket {
     const logicalName: string = 'UploadsBucket';
     const bucket = new s3.Bucket(this, logicalName , {
       bucketName: bucketName,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     return bucket;
-  }
+  }*/
   importBucket(bucketName: string): s3.IBucket {
     const bucket = s3.Bucket.fromBucketName(this,"AssetsBucket",bucketName);
     return bucket;

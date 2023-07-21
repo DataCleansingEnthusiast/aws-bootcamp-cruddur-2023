@@ -8,7 +8,6 @@ import botocore.exceptions
 class Ddb:
   def client():
     endpoint_url = os.getenv("AWS_ENDPOINT_URL")
-    
 
     if endpoint_url:
       attrs = { 'endpoint_url': endpoint_url }
@@ -20,12 +19,10 @@ class Ddb:
     return dynamodb
 
   def list_message_groups(client,my_user_uuid):
-    print('IN list_message_groups-----')
-
     year = str(datetime.now().year)
-    table_name = 'cruddur-messages'
-    print(my_user_uuid)
-
+    #table_name = 'cruddur-messages'
+    #print(my_user_uuid)
+    table_name = os.getenv("DDB_MESSAGE_TABLE")
     query_params = {
       'TableName': table_name,
       'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
@@ -56,7 +53,8 @@ class Ddb:
     return results
   def list_messages(client,message_group_uuid):
     year = str(datetime.now().year)
-    table_name = 'cruddur-messages'
+    #table_name = 'cruddur-messages'
+    table_name = os.getenv("DDB_MESSAGE_TABLE")
     query_params = {
       'TableName': table_name,
       'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
@@ -99,7 +97,8 @@ class Ddb:
       'user_handle': {'S': my_user_handle}
     }
     # insert the record into the table
-    table_name = 'cruddur-messages'
+    #table_name = 'cruddur-messages'
+    table_name = os.getenv("DDB_MESSAGE_TABLE")
     response = client.put_item(
       TableName=table_name,
       Item=record
@@ -116,7 +115,8 @@ class Ddb:
     }
   def create_message_group(client, message,my_user_uuid, my_user_display_name, my_user_handle, other_user_uuid, other_user_display_name, other_user_handle):
     print('== create_message_group.1')
-    table_name = 'cruddur-messages'
+    #table_name = 'cruddur-messages'
+    table_name = os.getenv("DDB_MESSAGE_TABLE")
     print('In dd.py create_message_group1 ---',my_user_uuid)
     message_group_uuid = str(uuid.uuid4())
     message_uuid = str(uuid.uuid4())

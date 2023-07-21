@@ -1,12 +1,10 @@
 import './ProfileAvatar.css';
 
 export default function ProfileAvatar(props) {
-  var backgroundImage = "none"
-  if (props.id != null) {
-    backgroundImage = `url("https://assets.roopish-awssolutions.com/avatars/${props.id}.jpg")`
-  } 
+  const backgroundImage = `url("https://assets.roopish-awssolutions.com/avatars/${props.id}.jpg")`
+   
   // console.log("ProfileAvatar", props)
-  // console.log(backgroundImage)
+   console.log(backgroundImage)
   const styles = {
     backgroundImage: backgroundImage,
     backgroundSize: 'cover',
@@ -20,3 +18,4 @@ export default function ProfileAvatar(props) {
     ></div>
   );
 }
+

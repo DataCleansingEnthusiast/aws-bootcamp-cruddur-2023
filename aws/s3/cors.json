@@ -4,7 +4,8 @@
             "*"
         ],
         "AllowedMethods": [
-            "PUT"
+            "PUT",
+            "POST"
         ],
         "AllowedOrigins": [
             "https://3000-datacleansi-awsbootcamp-*.gitpod.io",
