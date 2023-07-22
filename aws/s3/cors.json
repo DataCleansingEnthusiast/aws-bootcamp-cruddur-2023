@@ -8,8 +8,7 @@
             "POST"
         ],
         "AllowedOrigins": [
-            "https://3000-datacleansi-awsbootcamp-*.gitpod.io",
-            "https://*.roopish-aws-solutions.com"
+            "https://*.gitpod.io"
         ],
         "ExposeHeaders": [
             "x-amz-server-side-encryption",
