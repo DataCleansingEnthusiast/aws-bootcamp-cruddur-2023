@@ -279,3 +279,17 @@ We also modified Lambda code from cur.execute(sql,*params) to cur.execute(sql,pa
 • The Service stack is executed again by running the script [./bin/cfn/service](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/cfn/service)
 
 ![image](./assets/WeekX_14_CFNCrdSrvBackendFlask.PNG)
+
+## **CICD Pipeline and Create Activity**
+
+- We created another cognito user by signing up in the application and make a Crud message with the new cognito user.(I tested this locally as my prod is not working)
+- We made changes to ActivityForm.js to update hardcoded user handle with new cognito user
+- We also tested new cognito user in the local development environment by connecting with local postgres db and the same is done by pointing Dockerfile to local db by making relevant changes in the docker-compose.yaml file and get it into run by docker compose up.
+- We seed the data into local db by executing the file ./bin/db/setup and we update the cognito_user_id by running the script ./bin/db/update_cognito_user_ids
+- Changes needed to be done in the Activityform.js : added the `getAccessToken()` function import from `../lib/CheckAuth`
+- Retrieved the access token using `getAccessToken()` and added it to the `Authorization` header of the POST request.
+- Updated [aws/cfn/cicd/config.toml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/cfn/cicd/config.toml) by adding my Github repo name and ArtifactBucketName
+
+![image](./assets/WeekX_15_CodePipeline1.PNG)
+
+![image](./assets/WeekX_15_CodePipeline2.PNG)
