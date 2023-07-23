@@ -338,3 +338,94 @@ Several changes were made to [app.py](https://github.com/DataCleansingEnthusiast
 7) Added a new file [`backend-flask/lib/xray.py`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/xray.py) that defines the `init_xray` function for configuring AWS X-Ray for tracing with Flask.
 
 8) Made these changes to frontend-react-js/src/pages/NotificationsFeedPage.js a)Imported the `checkAuth` and `getAccessToken` functions from `lib/CheckAuth` b) Updated the `loadData` function to call `getAccessToken` before making the API request and retrieve the access token from `localStorage`.
+
+## **Refactor Flask Routes**
+
+We have refactored the " Routes" by creating separate python files for [users.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/routes/users.py), [general.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/routes/general.py), [messages.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/routes/messages.py) and [activities.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/routes/activities.py) which are referenced in the app.py using import statement
+
+## **Implement Replies for Posts**
+
+Generate a migration file to change the field `reply_to_activity_uuid` from integer to uuid in the db schema by running the script `./bin/generate/migration reply_activity_uuid_to_string`
+
+![image](./assets/WeekX_16_Migration.PNG)
+
+Made changes to [`backend-flask/db/sql/activities/home.sql`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/home.sql)
+
+In [backend-flask/db/sql/show.sql]([https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/home.sql)show.sql) we added a subquery in the SELECT statement to retrieve replies for each activity and also this subquery is aliased as `replies` and returned as a JSON array of objects named `replies` in the main query result
+
+In `backend-flask/db/sql/activities/object.sql` we added the `reply_to_activity_uuid` field in the SELECT statement to retrieve the reply's activity UUID.
+
+Migrations: The `set_last_successful_run()` and `get_last_successful_run()` functions in the `bin/db/migrate` and `bin/db/rollback` scripts were modified to convert the last successful run time to/from an integer for consistency.
+
+Generation: The `bin/generate/migration` script now generates a migration file based on the provided class name (`{klass}Migration`).
+
+Made changes to `frontend-react-js/src/components/ActivityItem.css` and added new styles for the replies section, including padding and background color.
+
+## **Error Handling for the app**
+
+There were several changes made to the code
+
+1. Changes to [backend-flask/db/sql/activities/home.sql](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/home.sql) and [backend-flask/db/sql/activities/show.sql](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/show.sql)
+2. For both backend-flask/services/create_message.py and backend-flask/services/create_reply.py, error message was updated from `message_exceed_max_chars` to `message_exceed_max_chars_1024`
+3. A new CSS class called **.activity_feed_primer** has been added to `frontend-react-js/src/components/ActivityFeed.css`
+4. In `frontend-react-js/src/components/ActivityFeed.js`, we added a message when there are no activities to show
+
+```bash
+if (props.activities.length === 0){
+content = <div className='activity_feed_primer'>
+<span>Nothing to see here yet.</span>
+</div>
+} else
+```
+
+5. In `frontend-react-js/src/components/ActivityForm.js`, error messages are now displayed using a new component called `FormErrors` and we use post request helper function.
+6. In `frontend-react-js/src/components/FormErrorItem.js`, a new component has been added to render individual error messages
+
+```bash
+export default function FormErrorItem(props) {
+const render_error = () => {
+switch (props.err_code)  {
+case 'generic_500':
+return "An internal server error has occurred."
+case 'generic_403':
+return "You are not authorized to perform this action."
+case 'generic_401':
+return "You are not authenticated to perform this action."
+// Replies
+case 'cognito_user_id_blank':
+return "The user was not provided."
+case 'activity_uuid_blank':
+return "The post id cannot be blank."
+case 'message_blank':
+return "The message cannot be blank."
+case 'message_exceed_max_chars_1024':
+return "The message is too long, it should be less than 1024 characters."
+// Users
+case 'message_group_uuid_blank':
+return "The message group cannot be blank."
+case 'user_receiver_handle_blank':
+return "You need to send a message to a valid user."
+// Profile
+case 'display_name_blank':
+return "The display name cannot be blank."
+default:
+// In the case for errors returned from Cognito, they
+// directly return the error so we just display it.
+return props.err_code
+}
+}
+return (
+  <div className="errorItem">
+    {render_error()}
+  </div>
+)
+}
+```
+
+7. In `frontend-react-js/src/components/FormErrors.css`, a new CSS file has been added to display the form errors.
+8. In `frontend-react-js/src/components/FormErrors.js`, a new component has been added to render a list of form errors.
+9. In `frontend-react-js/src/components/MessageForm.js`, error handling for sending a new message has been updated to use a post request function and handle errors. Also the error messages are now displayed using the FormErrors component.
+10. In `frontend-react-js/src/lib/Requests.js`, created a new file to hold helper functions for making HTTP requests. We also implemented request function to handle common logic for making requests. We also export post, put, get, and destroy functions to handle different HTTP methods.
+11. In `frontend-react-js/src/pages/HomeFeedPage.js`, we added imports for get and checkAuth. Also, modified the loadData function to use the get function from lib/Requests.
+12. In `frontend-react-js/src/pages/MessageGroupNewPage.js`, added import for get and checkAuth. Also, modified the loadUserShortData and loadMessageGroupsData functions to use the get function from the lib/Requests.
+13. In `frontend-react-js/src/pages/MessageGroupPage.js`, added import for get and checkAuth. Also, modified the loadMessageGroupsData function to use the get function from the lib/Requests.
