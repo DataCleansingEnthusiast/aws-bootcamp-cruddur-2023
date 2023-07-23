@@ -293,3 +293,48 @@ We also modified Lambda code from cur.execute(sql,*params) to cur.execute(sql,pa
 ![image](./assets/WeekX_15_CodePipeline1.PNG)
 
 ![image](./assets/WeekX_15_CodePipeline2.PNG)
+
+## **Refactor to use JWT Decorator in Flask App**
+
+- We created a decorator for JWT verification by changing the code in app.py ./backend-flask/app.py and backend-flask/lib/cognito_jwt_token.py.
+
+```
+from flask import request, g
+```
+
+- Replaced the `CognitoJwtToken` with
+
+```
+from lib.cognito_jwt_token import jwt_required
+```
+
+- Updated the `data_message_groups`, `data_messages`, `data_create_message`, `data_home`, `data_activities`, and `data_update_profile` functions to use the `jwt_required` decorator.
+- In `frontend-react-js/src/components/ReplyForm.js`, added a new event handler `close` to handle closing the popup form.
+
+  `const close = (event)=> {
+    if (event.target.classList.contains("reply_popup")) {
+      props.setPopped(false)
+    }
+  }`
+
+- Added the `reply_popup` class to the wrapping div to apply styling for the reply popup.
+
+## Refactor App.py
+
+Several changes were made to [app.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/app.py) 
+
+1) Imported and initialized various libraries and modules such as `init_rollbar`, `init_xray`, `init_cors`, and `init_cloudwatch`
+
+2) Updated the routes to use the `model_json` function to handle the response data.
+
+3) Added a new file [backend-flask/lib/cloudwatch.py](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/cloudwatch.py) that defines the `init_cloudwatch` function for configuring the logger to use CloudWatch for logging.
+
+4) Added a new file [`backend-flask/lib/cors.py`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/cors.py) that defines the `init_cors` function for initializing CORS with Flask.
+
+5) Added a new file [`backend-flask/lib/honeycomb.py`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/honeycomb.py) that defines the `init_honeycomb` function for initializing tracing and instrumentation with Flask using Honeycomb.
+
+6) Added a new file [`backend-flask/lib/rollbar.py`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/rollbar.py) that defines the `init_rollbar` function for initializing Rollbar error reporting with Flask.
+
+7) Added a new file [`backend-flask/lib/xray.py`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/lib/xray.py) that defines the `init_xray` function for configuring AWS X-Ray for tracing with Flask.
+
+8) Made these changes to frontend-react-js/src/pages/NotificationsFeedPage.js a)Imported the `checkAuth` and `getAccessToken` functions from `lib/CheckAuth` b) Updated the `loadData` function to call `getAccessToken` before making the API request and retrieve the access token from `localStorage`.
