@@ -257,3 +257,25 @@ We login to cruddurcfn and check the columns of table ‘users’ and see that b
 Login to  database to check the columns of users table
 
 ![image](assets/WeekX_12_Column_bio_prod.PNG)
+
+## **Modify the lambda function cruddur-post-confirmation to connect to the New RDS DB : cruddur-cfninstance**
+
+- The Lambda Function - *cruddur-post-confirmation* is invoked through the AWS Cognito which is used when a new user signs up or an existing user signs in to our cruddur app.
+- The following change are implemented in the Lambda Function - *cruddur-post-confirmation* so that it connects to the New RDS DB : **cruddur-cfninstance.**
+    - Edited the connection url in Environment Variable as seen below.
+    
+      ![image](./assets/WeekX_13_ConnURLNewRDSDB.PNG)
+    
+
+ • A New Security Group, CognitoLambdaSG is created containing with an Outbound Rule with ALLTRAFFIC 0.0.0.0/0 and no rules on Inbound and attach the Lambda Function to the VPC : CrdNetVPC created through CFN so that Lambda Function can access the New RDS DB : cruddur-cfninstance, which is also attached to CrdNetVPC.
+
+![image](./assets/WeekX_14_LambdaVPCSG.PNG)
+
+We also modified Lambda code from cur.execute(sql,*params) to cur.execute(sql,params).
+
+## **Use CORS for Service**
+
+• The parameters - EnvFrontendUrl ='https://roopish-awssolutions.com’ and EnvBackendUrl = '[https://api.roopish-awssolutions.com](https://api.roopish-awssolutions.com/)' are passed to the CFN Service stack by updating [aws/cfn/service/config.toml](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/aws/cfn/service/config.toml) NOTE: During office hours because I had issues with resolving 504 error, we changed the `EnvFrontendUrl='*'` and `EnvBackendUrl ='*'`
+• The Service stack is executed again by running the script [./bin/cfn/service](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/bin/cfn/service)
+
+![image](./assets/WeekX_14_CFNCrdSrvBackendFlask.PNG)
