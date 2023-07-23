@@ -429,3 +429,48 @@ return (
 11. In `frontend-react-js/src/pages/HomeFeedPage.js`, we added imports for get and checkAuth. Also, modified the loadData function to use the get function from lib/Requests.
 12. In `frontend-react-js/src/pages/MessageGroupNewPage.js`, added import for get and checkAuth. Also, modified the loadUserShortData and loadMessageGroupsData functions to use the get function from the lib/Requests.
 13. In `frontend-react-js/src/pages/MessageGroupPage.js`, added import for get and checkAuth. Also, modified the loadMessageGroupsData function to use the get function from the lib/Requests.
+
+## **Activity Show Page**
+
+1. In `backend-flask/db/migrations/16885335723217552_reply_to_activity_uuid_to_string.py`, changed the data type of the reply_to_activity_uuid column in the activities table from integer to uuid. Then the rollback changes it back.
+2. In `backend-flask/db/sql/activities/show.sql`, updated the SQL query to use a subquery and return the result as the activity field.
+3. In `backend-flask/routes/activities.py`, removed the data_show_activity route.
+4. In `backend-flask/routes/users.py`, we added a new route data_show_activity to retrieve a specific activity for a user.
+5. In `frontend-react-js/src/App.js`, we added a new route ActivityShowPage to display a specific activity.
+6. In `frontend-react-js/src/components/ActivityActionLike.js`, `frontend-react-js/src/components/ActivityActionReply.js``, `frontend-react-js/src/components/ActivityActionRepost.js`,  `frontend-react-js/src/components/ActivityActionShare.js` we added event.preventDefault() to prevent the default behavior of the click event.
+7. In `frontend-react-js/src/components/ActivityContent.css`, we changed the CSS selector from .activity_content a.activity_identity to .activity_content .activity_identity.
+Modified the styles for .activity_identity and its child elements.
+8. In `frontend-react-js/src/components/ActivityContent.js`, we replaced the <div> element with a <Link> component for the activity_avatar element.
+Modified the structure and classes of the activity_identity element.
+9. In `frontend-react-js/src/components/ActivityForm.js`, refactored the post function call to include an options object instead of individual parameters.
+Added a success property with a callback function to handle the successful response.
+10. In `frontend-react-js/src/components/ActivityItem.css`, added styles for the .activity_item class and its :hover state.
+11. In `frontend-react-js/src/components/ActivityItem.js`, import the Link component from react-router-dom. Also, wrap the entire ActivityItem component with a Link component to create a clickable link to the activity and remove the replies variable, which was previously used to render replies within the component.
+12. In `frontend-react-js/src/components/MessageForm.js`, refactored the post function call to include an options object instead of individual parameters. Also, added a success property with a callback function to handle the successful response.
+13. In `frontend-react-js/src/components/ProfileForm.js`, refactored the put function call to include an options object instead of individual parameters. Also, added a success property with a callback function to handle the successful response.
+14. Both `frontend-react-js/src/components/Replies.css` and `frontend-react-js/src/components/Replies.`s, define the styles and component for rendering replies to an activity.
+15. In ReplyForm.js, we added a new options parameter to the post function call in the onsubmit function.
+16. In Requests.js, updated the post function to accept the options parameter. Updated the request function to handle the options parameter and use it for error handling and authentication.
+17. Renamed the file from HomeFeedPage.js to ActivityShowPage.js. We also updated the import statements to match the renamed file and made changes to loadData function to fetch a specific activity using the handle and activity_uuid parameters from the URL. Also updated the JS code to render the fetched activity and its replies using the ActivityItem and Replies components.
+18. In HomeFeedPage.js, we updated the loadData function to fetch activities with authentication and removed the setActivities prop from the ReplyForm component.
+19. In MessageGroupNewPage.js, updated the loadUserShortData and loadMessageGroupsData functions to fetch data with authentication.
+20. In MessageGroupsPage.js, updated the loadData function to fetch message groups with authentication.
+21. In NotificationsFeedPage.js, updated the loadData function to fetch notifications activities with authentication.
+22. In UserFeedPage.js, updated the loadData function to fetch user activities without authentication.
+
+## Clean Up - part 1 & 2
+
+1. We want to see data from another user in our application and so we need to seed data through the file - [seed.sql](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/seed.sql) by making the following additions and then login to the local postgres db : cruddur , by using the command ./bin/db/connect and inserting manually the sql command that were added in the seed.sql as below
+
+```sql
+  (SELECT uuid from public.users WHERE users.handle = 'roopish1' LIMIT 1),
+    'I am the other user!',    
+    current_timestamp + interval '1 day'
+  );
+```
+
+After login to the application, we get to see the see data from two users on the " Home" page.
+
+1. In `/frontend-react-js/src/pages/ActivityShowPage.js`, changes were made so that status page shows "Crud" at the top instead of "Home". Back Button Arrow is also added which when pressed takes us to the "Home" page of the application by making changes in the activityshowpage.js and activityshowpage.css. 
+2. Exact time is also rendered by making changes in the file to `/frontend-react-js/src/components/ActivityItem.js`
+3. Our migration has not been successful on checking our local db -cruddur where the "reply_to_activitiy_uuid" still reflects as type " Integer" instead of "uuid". So we rerun ./bin/db/migrate
