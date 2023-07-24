@@ -502,7 +502,8 @@ After login to the application, we get to see the see data from two users on the
       ![image](./assets/WeekX_108_Machineuser4_accesskey4.PNG)
       ![image](./assets/WeekX_108_Machineuser4_ReleaseChange.PNG)
 
-Note: If I didn’t have issues with 504 error in production, I should have been able to save the messages in DynamoDB table. I was able to do this locally. Please see screenshots of Cruds and how it’s stored in tables.
+**Note**: If I didn’t have issues with 504 error in production, I should have been able to save the messages in DynamoDB table. In production, I am able to see the Profile avatar picture but not messages. When I inspect the page I see a 504 error. So, to demonstrate that my app works locally I tried to create messages. Please see screenshots of Cruds and how it’s stored in tables.
+
 14. Locally post reply on the app and check whether it is saved to Database. 
 ![image](./assets/WeekX_110_ReplyTest.gif) 
 ![image](./assets/WeekX_110_ReplyCheckDB.PNG)
