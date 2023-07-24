@@ -351,7 +351,7 @@ Generate a migration file to change the field `reply_to_activity_uuid` from in
 
 Made changes to [`backend-flask/db/sql/activities/home.sql`](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/home.sql)
 
-In [backend-flask/db/sql/show.sql]([https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/home.sql)show.sql) we added a subquery in the SELECT statement to retrieve replies for each activity and also this subquery is aliased as `replies` and returned as a JSON array of objects named `replies` in the main query result
+In [backend-flask/db/sql/show.sql](https://github.com/DataCleansingEnthusiast/aws-bootcamp-cruddur-2023/blob/main/backend-flask/db/sql/activities/show.sql) we added a subquery in the SELECT statement to retrieve replies for each activity and also this subquery is aliased as `replies` and returned as a JSON array of objects named `replies` in the main query result
 
 In `backend-flask/db/sql/activities/object.sql` we added the `reply_to_activity_uuid` field in the SELECT statement to retrieve the reply's activity UUID.
 
@@ -472,5 +472,39 @@ Added a success property with a callback function to handle the successful respo
 After login to the application, we get to see the see data from two users on the " Home" page.
 
 1. In `/frontend-react-js/src/pages/ActivityShowPage.js`, changes were made so that status page shows "Crud" at the top instead of "Home". Back Button Arrow is also added which when pressed takes us to the "Home" page of the application by making changes in the activityshowpage.js and activityshowpage.css. 
-2. Exact time is also rendered by making changes in the file to `/frontend-react-js/src/components/ActivityItem.js`
-3. Our migration has not been successful on checking our local db -cruddur where the "reply_to_activitiy_uuid" still reflects as type " Integer" instead of "uuid". So we rerun ./bin/db/migrate
+2. Exact time is also rendered by making changes in the file to `/frontend-react-js/src/components/ActivityItem.js` ![image](WeekX_89_ExactTime.PNG)
+3. Our migration has not been successful on checking our local db -cruddur where the "reply_to_activitiy_uuid" still reflects as type " Integer" instead of "uuid". So we rerun `./bin/db/migrate`
+4. We rerun `./bin/db/setup` to make sure everything correct. Below are some screenshots before and after running setup
+![image](./assets/WeekX_91_BeforeRunningSetUp.PNG)
+![image](./assets/WeekX_91_RunSetUp.PNG)
+![image](./assets/WeekX_91_AfterRunningSetUp.PNG)
+![image](./assets/WeekX_91_AfterLoggingIn.PNG)
+5. We create a new file `./frontend-react-js/src/components/ActivityShowItem.js`. We make changes to ActivityItem.css and ActivitiyContent.css to further fine tune the rendering of pages.
+6. Override the connection_url to Prod_connectionurl to run the migrate script. `CONNECTION_URL=$PROD_CONNECTION_URL ./bin/db/migrate`
+7. We check the whether the migration has run properly or not logging into the Prod database by the command ./bin/db/connect prod and get to see the following output where the type is changed to uuid, thereby making it possible for us to generate replies in the application. ![image](./assets/WeekX_90_ConnectToProd.PNG)
+8. We roll out backend Change, we run a CICD pipeline to merge the " main" branch into "prod". 
+
+      ![image](./assets/WeekX_100_MergeMainToProd_1.PNG)
+
+      ![image](./assets/WeekX_100_MergeMainToProd_2.PNG)
+
+9. Rolling out the frontend changes in the application is through a sync tool. ![image](./assets/WeekX_101_Frontend_Sync.PNG) `./bin/frontend/static-build` is executed after correcting the errors that we encounter and post the successful build.  ![image](./assets/WeekX_102_Frontend_Build.PNG)
+10. We run the sync file  ./bin/frontend/sync and it is executed after correcting error by doing the change of adding changeset.json in the erb/sync.env.erb file        ![image](./assets/WeekX_103_Sync.GIF)
+11. This generates a changeset file i.e. an invalidation file on the cloudfront as shown below. ![image](./assets/WeekX_103_Invalidation.PNG)
+12. We run the Production Dynamodb Database , CrdDdb-DynamoDBTable-12ZX6Z3TOW6KN in the local environment to check whether it runs properly or not before running it in Production environment ![image](./assets/WeekX_105_CheckLatestRev_DDBTbl.PNG)
+13. We created a role " machineuser" using a CFN template that has permissions to read and write into the Production DynamoDB Table - CrdDdb-DynamoDBTable-12ZX6Z3TOW6KN 
+      ![image](./assets/WeekX_108_Machineuser1.PNG)
+      ![image](./assets/WeekX_108_Machineuser2.PNG)
+      ![image](./assets/WeekX_108_Machineuser3.PNG)
+      ![image](./assets/WeekX_108_Machineuser4_accesskey1.PNG)
+      ![image](./assets/WeekX_108_Machineuser4_accesskey2.PNG)
+      ![image](./assets/WeekX_108_Machineuser4_accesskey3.PNG)
+      ![image](./assets/WeekX_108_Machineuser4_accesskey4.PNG)
+      ![image](./assets/WeekX_108_Machineuser4_ReleaseChange.PNG)
+
+Note: If I didn’t have issues with 504 error in production, I should have been able to save the messages in DynamoDB table. I was able to do this locally. Please see screenshots of Cruds and how it’s stored in tables.
+14. Locally post reply on the app and check whether it is saved to Database. 
+![image](./assets/WeekX_110_ReplyTest.gif) 
+![image](./assets/WeekX_110_ReplyCheckDB.PNG)
+
+Check with Alternate user ![image](./assets/WeekX_110_AltUserTest.gif)
